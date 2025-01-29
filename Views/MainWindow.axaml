@@ -24,6 +24,10 @@
             <v:SearchBar DockPanel.Dock="Top"/>
             <Grid Name="ImageGrid"></Grid>
         </DockPanel>
+        
+        <ScrollViewer>
+            <Grid Name="Grille"></Grid>
+        </ScrollViewer>
     </DockPanel>
 
 </Window>
