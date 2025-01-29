@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="photocool.Views.CaseGrille">
-    <StackPanel>
-        <Image></Image>
-        <Label>image</Label>
-        <Label>TODO : liste de pillules</Label>
+    <StackPanel Orientation="Vertical">
+        <Image HorizontalAlignment="Center" Source="C:\Users\qasim\RiderProjects\photocool\Assets\daisy_ia.png" Width="100" Height="100"></Image>
+        <Label HorizontalAlignment="Center">image</Label>
+        <Label HorizontalAlignment="Center">TODO : liste de pillules</Label>
     </StackPanel>
 </UserControl>
