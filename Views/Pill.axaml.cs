@@ -1,21 +1,32 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
 namespace photocool.Views;
 
-public class Pill : Button 
+public partial class Pill : UserControl 
 {
     public Pill()
     {
-        Random random = new();
-        int r = random.Next(0, 200); // Values between 0 and 127
-        int g = random.Next(0, 200);
-        int b = random.Next(0, 200);
-        Background = new SolidColorBrush(Color.FromRgb((byte)r,(byte)g,(byte)b));
-        
-        Console.WriteLine("PillTemplated instantiated !");
+        Margin = new Thickness(5);
+        InitializeComponent();
+    }
+
+    private static readonly StyledProperty<string> TextProperty =
+        AvaloniaProperty.Register<Pill, string>(nameof(Text), string.Empty);
+    public string Text
+    {
+        get => GetValue(TextProperty);
+        set => SetValue(TextProperty, value);
+    }
+
+    private static readonly StyledProperty<IBrush> PillColorProperty =
+        AvaloniaProperty.Register<Pill, IBrush>(nameof(PillColor), Brushes.Gray); 
+    
+    public IBrush PillColor
+    {
+        get => GetValue(PillColorProperty);
+        set => SetValue(PillColorProperty, value);
     }
 }
