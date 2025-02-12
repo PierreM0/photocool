@@ -20,8 +20,8 @@
 
     <DockPanel Width="800" Height="600">
         <v:NavBar DockPanel.Dock="Top"/>
-        <DockPanel>
-            <TextBlock> TODO: SEARCHBAR </TextBlock>
+        <DockPanel Name="Panel">
+            <v:SearchBar DockPanel.Dock="Top"/>
             <Grid Name="ImageGrid"></Grid>
         </DockPanel>
     </DockPanel>

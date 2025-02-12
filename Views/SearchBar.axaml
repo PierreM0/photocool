@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:photocool.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="photocool.Views.SearchBar">
+    
+    <UserControl.Styles>
+        <Style Selector="Button,Button:focus">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+    </UserControl.Styles>
+    
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
+        
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+            <Label FontSize="12">Ajouter un filtre</Label>
+            <Border BorderBrush="Black" BorderThickness="2">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBox KeyUp="AjoutFiltre_OnKeyUp" Width="215" Height="30" Name="AjoutFiltre"></TextBox> 
+                    <Button Click="NewFilter_OnClick" Name="NewFilter" FontSize="10" Height="30">
+                        <Image Source="avares://photocool/Assets/plus-svgrepo-com.png"></Image>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        
+        
+        <StackPanel>
+            <Label FontSize="3">&#160;</Label> <!-- align the list with the textbox -->
+            <views:ListPills Name="PillsList" MaxRendered="3"/>
+        </StackPanel>
+        
+    </StackPanel>
+</UserControl>

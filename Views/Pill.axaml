@@ -1,27 +1,17 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:photocool.Views"
-        xmlns:viewModels="clr-namespace:photocool.ViewModels"
-        x:DataType="viewModels:PillViewModel">
-    <!-- <Design.DataContext> -->
-    <!--     <vm:PillViewModel/> -->
-    <!-- </Design.DataContext> -->
-    <Design.PreviewWith>
-        <controls:Pill>Bonjour</controls:Pill>
-    </Design.PreviewWith>
-    <!-- -->
-    <Style Selector="controls|Pill">
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="CornerRadius" Value="10"/>
-    </Style>
-    
-    <Style Selector="controls|Pill TextBlock">
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontWeight" Value="10"/>
-        <Setter Property="FontSize" Value="20" />
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-    </Style>
-</Styles>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="40"
+             x:Class="photocool.Views.Pill"
+             x:Name="root">
+    <Border Background="{Binding PillColor, ElementName=root}"
+            CornerRadius="20"
+            Padding="10,5">
+        <TextBlock Text="{Binding Text, ElementName=root}"
+                   Foreground="White"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+    </Border>
+</UserControl>
