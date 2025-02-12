@@ -1,7 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Threading;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -17,16 +21,21 @@ public partial class ListPills : UserControl
         InitializeComponent();
     }
     
-    public int MaxRendered { get; set; } = 255;
+    public int MaxRendered { get; set; } = 2;
 
     private static Dictionary<string, IBrush> pillColors = new();
     private static List<Pill> _list = new();
     public void Add(Pill pill)
     {
+        
+        pill.AddHandler(PointerPressedEvent, ((object sender, PointerPressedEventArgs e) =>
+        {
+            _list.Remove(pill);
+            PillContainer.Children.Remove(pill);
+        }), RoutingStrategies.Tunnel);
+        
         Dispatcher.UIThread.Invoke(() =>
         {
-            
-            // toute les meme tags on une seule couleur
             if (pillColors.TryGetValue(pill.Text, out var color))
             {
                 pill.PillColor = color;
@@ -48,6 +57,8 @@ public partial class ListPills : UserControl
             {
                 PillContainer.Children.Add(pill);
             } 
+
+
             else if (PillContainer.Children.Count == MaxRendered)
             {
                 PillContainer.Children.Add(new Pill()
