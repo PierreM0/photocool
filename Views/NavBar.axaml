@@ -11,8 +11,8 @@
     </UserControl.Styles>
     
     <StackPanel Orientation="Horizontal">
-        <Button>Nouveau tag</Button>
-        <Button>Nouvelle image</Button>
+        <Button Click="TagButton_Handler">Nouveau tag</Button>
+        <Button Click="ImageButton_Handler">Nouvelle image</Button>
         <Button>Paramètre</Button>
     </StackPanel>
 </UserControl>

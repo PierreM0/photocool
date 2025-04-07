@@ -16,6 +16,7 @@ public partial class SearchBar: UserControl
 
     private void AjoutFiltre_OnKeyUp(object? sender, KeyEventArgs e)
     {
+        
     }
 
     private void NewFilter_OnClick(object? sender, RoutedEventArgs e)
