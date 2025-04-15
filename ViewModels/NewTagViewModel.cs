@@ -31,6 +31,13 @@ public class NewTagViewModel : INotifyPropertyChanged
         set { _tags = value; OnPropertyChanged(nameof(Tags)); }
     }
 
+    private string _errorMessage = string.Empty;
+    public string ErrorMessage
+    {
+        get => _errorMessage;
+        set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); }
+    }
+
     public NewTagViewModel()
     {
         RefreshTags();

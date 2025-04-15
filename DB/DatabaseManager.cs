@@ -11,6 +11,8 @@ namespace photocool.DB;
 
 public class DatabaseManager
 {
+    public const int DUPLICATE_ENTRY = 1062;
+    
     private static readonly string _connectionString = "Server=localhost;Port=3306;Database=photocool;Uid=root;Pwd=root;";
 /// <summary>
 /// Fonction qui renvoie tout les tags dans un reader 
@@ -46,28 +48,12 @@ public class DatabaseManager
         {
             connection.Open();
             string query = "INSERT INTO `Tag` (`Tag`) VALUES (@tag)";
-            try
-            {
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@tag", tag);
-                command.ExecuteNonQuery();
-                return command.LastInsertedId;
-            }
-            catch (MySqlException e)
-            {
-                if (e.Number == 1062) // 1062 = Duplicate entry
-                {
-                    Console.WriteLine("Doublon détecté !");
-                }
-                else
-                {
-                    Console.WriteLine("Erreur MySQL : " + e.Message);
-                }
-            }
-            
-        }
 
-        return -1L;
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@tag", tag);
+            command.ExecuteNonQuery();
+            return command.LastInsertedId;
+        }
     }
 /// <summary>
 /// Fonction qui supprime un tag avec son tag de la bdd

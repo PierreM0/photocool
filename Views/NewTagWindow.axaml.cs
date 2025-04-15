@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using MySql.Data.MySqlClient;
 using photocool.DB;
 using photocool.ViewModels;
 
@@ -26,7 +27,16 @@ public partial class NewTagWindow : Window
         TagNameResult = ViewModel.TagName;
         TagParentResult = ViewModel.TagParent;
 
-        DatabaseManager.addTag(TagNameResult);
+        try
+        {
+            DatabaseManager.addTag(TagNameResult);
+        }
+        catch (MySqlException ex)
+        {
+            ViewModel.ErrorMessage = "Le tag '" + ViewModel.TagName + "' existe déjà !";
+            return;
+        }
+
         DatabaseManager.addParentToTag(TagNameResult, TagParentResult);
         
         Close();
