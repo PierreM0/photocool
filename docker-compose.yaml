@@ -14,7 +14,7 @@ services:
       - "3306:3306"
     volumes:
       - mariadb:/var/lib/mysql
-      - ./photocool.sql:/docker-entrypoint-initdb.d
+      - ./initdb:/docker-entrypoint-initdb.d
 
   phpmyadmin:
     image: phpmyadmin
