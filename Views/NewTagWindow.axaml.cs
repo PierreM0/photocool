@@ -1,24 +1,39 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using photocool.DB;
+using photocool.ViewModels;
 
 namespace photocool.Views;
 
 public partial class NewTagWindow : Window
 {
+    public NewTagViewModel ViewModel { get; } = new();
+    
     public NewTagWindow()
     {
         InitializeComponent();
+        DataContext = ViewModel;
     }
 
-    private void Cancel_Click(object? sender, RoutedEventArgs e)
-    {
-        throw new System.NotImplementedException();
-    }
+    public string TagNameResult { get; private set; }
+    public string TagParentResult { get; private set; }
 
     private void OK_Click(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        TagNameResult = ViewModel.TagName;
+        TagParentResult = ViewModel.TagParent;
+
+        DatabaseManager.addTag(TagNameResult);
+        DatabaseManager.addParentToTag(TagNameResult, TagParentResult);
+        
+        Close();
+    }
+    
+    private void Cancel_Click(object? sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }

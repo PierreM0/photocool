@@ -15,36 +15,16 @@ public partial class NavBar : UserControl
     {
         InitializeComponent();
     }
-/**
- * Tags done.
- */
-    private void TagButton_Handler(object? sender, RoutedEventArgs e)
+    
+    /**
+     * Tags done.
+     */
+    private async void TagButton_Handler(object? sender, RoutedEventArgs e)
     {
-        try
-        {
-            //DatabaseManager.addImage("C:\\Users\\Adam\\Pictures\\images_coolmdr\\RDT_20240424_0206313735683715627756656.jpg",
-            //    "test", "usopp");
-            List<long> tagIds = new List<long>();
-            tagIds.Add(11L);
-            tagIds.Add(1L);
-            foreach (var VARIABLE in DatabaseManager.getImages(tagIds))
-            {
-                Console.WriteLine(VARIABLE.Key);
-            }
-            
-        }
-        catch (MySqlException ex)
-        {
-            if (ex.Number == 1062) // 1062 = Duplicate entry
-            {
-                Console.WriteLine("Doublon détecté !");
-            }
-            else
-            {
-                Console.WriteLine("Erreur MySQL : " + ex.Message);
-            }
-        }
-
+        Window? parentWindow = this.VisualRoot as Window;
+        
+        var window = new NewTagWindow();
+        await window.ShowDialog(parentWindow);
     }
     /**TODO:
      * récupérer images avec n tags (ET) OU is done

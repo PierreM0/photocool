@@ -2,9 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="clr-namespace:photocool.ViewModels"
+        x:DataType="vm:NewTagViewModel"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="400"
         x:Class="photocool.Views.NewTagWindow"
         Title="NewTagWindow">
+    
     <StackPanel Margin="10" Spacing="10">
         <TextBlock Text="Nom du tag : "></TextBlock>
         <TextBox Text="{Binding TagName}"></TextBox>
@@ -13,8 +16,8 @@
         <TextBox Text="{Binding TagParent}"></TextBox>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="5">
-            <Button Content="Annuler" Click="Cancel_Click"></Button>
             <Button Content="OK" Click="OK_Click"></Button>
+            <Button Content="Annuler" Click="Cancel_Click"></Button>
         </StackPanel>
     </StackPanel>
 </Window>
