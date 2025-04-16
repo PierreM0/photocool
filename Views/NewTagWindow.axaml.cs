@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using MySql.Data.MySqlClient;
 using photocool.DB;
 using photocool.ViewModels;
@@ -22,7 +23,7 @@ public partial class NewTagWindow : Window
     public string TagNameResult { get; private set; }
     public string TagParentResult { get; private set; }
 
-    private void OK_Click(object? sender, RoutedEventArgs e)
+    private void Add_Click(object? sender, RoutedEventArgs e)
     {
         TagNameResult = ViewModel.TagName;
         TagParentResult = ViewModel.TagParent;
@@ -33,16 +34,15 @@ public partial class NewTagWindow : Window
         }
         catch (MySqlException ex)
         {
-            ViewModel.ErrorMessage = "Le tag '" + ViewModel.TagName + "' existe déjà !";
+            ViewModel.SetMessage("Le tag '" + ViewModel.TagName + "' existe déjà !", new SolidColorBrush(Colors.Red));
             return;
         }
 
+        // TODO check if parent exists + rollback?
         DatabaseManager.addParentToTag(TagNameResult, TagParentResult);
-        
-        Close();
     }
     
-    private void Cancel_Click(object? sender, RoutedEventArgs e)
+    private void Close_Click(object? sender, RoutedEventArgs e)
     {
         Close();
     }

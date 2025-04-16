@@ -16,11 +16,11 @@
         
         <TextBlock Text="Parent du tag : "></TextBlock>
         <ComboBox ItemsSource="{Binding Tags}" SelectedItem="{Binding TagParent}" Width="280"></ComboBox>
-        <TextBlock Foreground="Red" Text="{Binding ErrorMessage}"></TextBlock>
+        <TextBlock Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-            <Button Content="OK" Click="OK_Click"></Button>
-            <Button Content="Annuler" Click="Cancel_Click"></Button>
+            <Button Content="Ajouter" Click="Add_Click"></Button>
+            <Button Content="Fermer" Click="Close_Click"></Button>
         </StackPanel>
     </StackPanel>
 </Window>

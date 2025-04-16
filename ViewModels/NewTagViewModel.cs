@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Avalonia.Media;
 using photocool.DB;
 
 namespace photocool.ViewModels;
@@ -31,11 +32,18 @@ public class NewTagViewModel : INotifyPropertyChanged
         set { _tags = value; OnPropertyChanged(nameof(Tags)); }
     }
 
-    private string _errorMessage = string.Empty;
-    public string ErrorMessage
+    private string _message = string.Empty;
+    public string Message
     {
-        get => _errorMessage;
-        set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); }
+        get => _message;
+        set { _message = value; OnPropertyChanged(nameof(Message)); }
+    }
+
+    private Brush _messageColor;
+    public Brush MessageColor
+    {
+        get => _messageColor;
+        set { _messageColor = value; OnPropertyChanged(nameof(MessageColor)); }
     }
 
     public NewTagViewModel()
@@ -50,6 +58,12 @@ public class NewTagViewModel : INotifyPropertyChanged
         {
             _tags.Add(tag);
         }
+    }
+
+    public void SetMessage(string message, Brush color)
+    {
+        Message = message;
+        MessageColor = color;
     }
 
     public void OnPropertyChanged(string propertyName)
