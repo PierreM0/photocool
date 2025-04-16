@@ -10,6 +10,7 @@ public class TagRepository
     public static void Refresh()
     {
         Tags.Clear();
+        Tags.Add(string.Empty);
         foreach (string tag in DatabaseManager.getAllTags())
         {
             Tags.Add(tag);

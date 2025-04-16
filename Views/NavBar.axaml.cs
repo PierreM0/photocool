@@ -29,9 +29,14 @@ public partial class NavBar : UserControl
         await window.ShowDialog(parentWindow);
     }
     
-    private void Modify_Tag_Click(object? sender, RoutedEventArgs e)
+    private async void Modify_Tag_Click(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        Window? parentWindow = this.VisualRoot as Window;
+        if (parentWindow == null)
+            return;
+        
+        var window = new ModifyTagWindow();
+        await window.ShowDialog(parentWindow);
     }
     
     private async void Delete_Tag_Click(object? sender, RoutedEventArgs e)
