@@ -21,22 +21,19 @@ public partial class NewTagWindow : Window
         InitializeComponent();
         DataContext = ViewModel;
     }
-
-    public string TagNameResult { get; private set; }
-    public string TagParentResult { get; private set; }
-
+    
     private void Add_Click(object? sender, RoutedEventArgs e)
     {
-        TagNameResult = ViewModel.TagName;
-        TagParentResult = ViewModel.TagParent;
+        string tagName = ViewModel.TagName;
+        string tagParent = ViewModel.TagParent;
 
-        if (TagNameResult == string.Empty || TagParentResult == string.Empty)
+        if (tagName == string.Empty || tagParent == string.Empty)
         {
             ViewModel.SetMessage("Veuillez renseignez tous les champs!", RED);
             return;
         }
 
-        if (TagNameResult == TagParentResult)
+        if (tagName == tagParent)
         {
             ViewModel.SetMessage("Un tag ne peut pas être parent de lui-même!", RED);
             return;
@@ -44,13 +41,13 @@ public partial class NewTagWindow : Window
 
         try
         {
-            DatabaseManager.addTagWithParent(TagNameResult, TagParentResult);
+            DatabaseManager.addTagWithParent(tagName, tagParent);
         }
         catch (MySqlException ex)
         {
             if (ex.Number == DatabaseManager.DUPLICATE_ENTRY)
             {
-                ViewModel.SetMessage("Le tag '" + TagNameResult + "' existe déjà !", RED);
+                ViewModel.SetMessage("Le tag '" + tagName + "' existe déjà !", RED);
             }
             else
             {
@@ -60,7 +57,7 @@ public partial class NewTagWindow : Window
             return;
         }
         
-        ViewModel.SetMessage("Le tag '" + TagNameResult + "' a été ajouté!", GREEN);
+        ViewModel.SetMessage("Le tag '" + tagName + "' a été ajouté!", GREEN);
         ViewModel.RefreshTags();
     }
     

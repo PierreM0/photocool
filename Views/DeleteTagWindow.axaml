@@ -3,25 +3,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:photocool.ViewModels"
-        x:DataType="vm:NewTagViewModel"
+        x:DataType="vm:DeleteTagViewModel"
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="250"
-        x:Class="photocool.Views.NewTagWindow"
+        x:Class="photocool.Views.DeleteTagWindow"
         Title="Nouveau tag"
         Width="300"
         Height="250">
     
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
-            <Button Content="Ajouter" Click="Add_Click"></Button>
+            <Button Content="Supprimer" Click="Delete_Click"></Button>
             <Button Content="Fermer" Click="Close_Click"></Button>
         </StackPanel>
         
         <StackPanel Margin="10" Spacing="10">
-            <TextBlock Text="Nom du tag : "></TextBlock>
-            <TextBox Text="{Binding TagName}"></TextBox>
-        
-            <TextBlock Text="Parent du tag : "></TextBlock>
-            <ComboBox ItemsSource="{Binding Tags}" SelectedItem="{Binding TagParent}" Width="280"></ComboBox>
+            <TextBlock Text="Nom du tag à supprimer : "></TextBlock>
+            <ComboBox ItemsSource="{Binding Tags}" SelectedItem="{Binding TagName}" Width="280"></ComboBox>
             <TextBlock TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         </StackPanel>
     </DockPanel>

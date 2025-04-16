@@ -34,9 +34,14 @@ public partial class NavBar : UserControl
         throw new NotImplementedException();
     }
     
-    private void Delete_Tag_Click(object? sender, RoutedEventArgs e)
+    private async void Delete_Tag_Click(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        Window? parentWindow = this.VisualRoot as Window;
+        if (parentWindow == null)
+            return;
+        
+        var window = new DeleteTagWindow();
+        await window.ShowDialog(parentWindow);
     }
     
     /**TODO:
