@@ -55,6 +55,52 @@ public class DatabaseManager
             return command.LastInsertedId;
         }
     }
+
+    /// <summary>
+    /// Fonction qui renomme un tag de la BDD
+    /// </summary>
+    /// <param name="tagToModify">Le nom du tag à modifier</param>
+    /// <param name="newTag">Le nouveau nom du tag</param>
+    public static void modifyTag(string tagToModify, string newTag)
+    {
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            string query = "UPDATE `Tag` SET `tag`=@newTag WHERE `tag`=@tagToModify";
+
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@newTag", newTag);
+            command.Parameters.AddWithValue("@tagToModify", tagToModify);
+            command.ExecuteNonQuery();
+        }
+    }
+    
+    /// <summary>
+    /// Fonction qui modifie le parent d'un tag de la BDD
+    /// </summary>
+    /// <param name="tagToModify">Le nom du tag à modifier</param>
+    /// <param name="newTagParent">Le nouveau parent du tag</param>
+    public static void modifyTagParent(string tagToModify, string newTagParent)
+    {
+        long id = getTagId(tagToModify);
+        long idparent = getTagId(newTagParent);
+        if (id == -1L || idparent == -1L)
+        {
+            throw new Exception("Erreur l'un des deux tag n'existe pas");
+        }
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            string query = "UPDATE `tag_famille` SET `tag_parent`=@idparent WHERE `tag_fils`=@idtag";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@idtag", id);
+                command.Parameters.AddWithValue("@idparent", idparent);
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+    
 /// <summary>
 /// Fonction qui supprime un tag avec son tag de la bdd
 /// </summary>

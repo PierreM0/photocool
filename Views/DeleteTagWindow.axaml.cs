@@ -24,6 +24,12 @@ public partial class DeleteTagWindow : Window
     private void Delete_Click(object? sender, RoutedEventArgs e)
     {
         string tagName = ViewModel.TagName;
+        if (string.IsNullOrEmpty(tagName))
+        {
+            ViewModel.SetMessage("Veuillez renseigner le nom du tag à supprimer !", RED);
+            return;
+        }
+        
         DatabaseManager.removeTag(tagName);
         ViewModel.SetMessage("Le tag '" + tagName + "' a été supprimé!", GREEN);
         TagRepository.Refresh();
