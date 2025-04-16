@@ -12,6 +12,8 @@ namespace photocool.Views;
 
 public partial class NewTagWindow : Window
 {
+    private static Brush RED = new SolidColorBrush(Colors.Red);
+    private static Brush GREEN = new SolidColorBrush(Colors.Green);
     public NewTagViewModel ViewModel { get; } = new();
     
     public NewTagWindow()
@@ -28,18 +30,38 @@ public partial class NewTagWindow : Window
         TagNameResult = ViewModel.TagName;
         TagParentResult = ViewModel.TagParent;
 
-        try
+        if (TagNameResult == string.Empty || TagParentResult == string.Empty)
         {
-            DatabaseManager.addTag(TagNameResult);
-        }
-        catch (MySqlException ex)
-        {
-            ViewModel.SetMessage("Le tag '" + ViewModel.TagName + "' existe déjà !", new SolidColorBrush(Colors.Red));
+            ViewModel.SetMessage("Veuillez renseignez tous les champs!", RED);
             return;
         }
 
-        // TODO check if parent exists + rollback?
-        DatabaseManager.addParentToTag(TagNameResult, TagParentResult);
+        if (TagNameResult == TagParentResult)
+        {
+            ViewModel.SetMessage("Un tag ne peut pas être parent de lui-même!", RED);
+            return;
+        }
+
+        try
+        {
+            DatabaseManager.addTagWithParent(TagNameResult, TagParentResult);
+        }
+        catch (MySqlException ex)
+        {
+            if (ex.Number == DatabaseManager.DUPLICATE_ENTRY)
+            {
+                ViewModel.SetMessage("Le tag '" + TagNameResult + "' existe déjà !", RED);
+            }
+            else
+            {
+                ViewModel.SetMessage("Une erreur est survenue.", RED);
+            }
+
+            return;
+        }
+        
+        ViewModel.SetMessage("Le tag '" + TagNameResult + "' a été ajouté!", GREEN);
+        ViewModel.RefreshTags();
     }
     
     private void Close_Click(object? sender, RoutedEventArgs e)

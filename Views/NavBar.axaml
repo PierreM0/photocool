@@ -4,15 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="photocool.Views.NavBar">
-    <UserControl.Styles>
-        <Style Selector="Button">
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-    </UserControl.Styles>
-    
-    <StackPanel Orientation="Horizontal">
-        <Button Click="TagButton_Handler">Nouveau tag</Button>
-        <Button Click="ImageButton_Handler">Nouvelle image</Button>
-        <Button>Paramètre</Button>
-    </StackPanel>
+    <Menu>
+        <MenuItem Header="Tag">
+            <MenuItem Header="Ajouter" Click="Add_Tag_Click"></MenuItem>
+            <MenuItem Header="Modifier"></MenuItem>
+            <MenuItem Header="Supprimer"></MenuItem>
+        </MenuItem>
+        
+        <MenuItem Header="Image">
+            <MenuItem Header="Ajouter" Click="Add_Image_Click"></MenuItem>
+            <MenuItem Header="Modifier"></MenuItem>
+            <MenuItem Header="Supprimer"></MenuItem>
+        </MenuItem>
+    </Menu>
 </UserControl>

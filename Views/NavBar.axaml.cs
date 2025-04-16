@@ -19,9 +19,11 @@ public partial class NavBar : UserControl
     /**
      * Tags done.
      */
-    private async void TagButton_Handler(object? sender, RoutedEventArgs e)
+    private async void Add_Tag_Click(object? sender, RoutedEventArgs e)
     {
         Window? parentWindow = this.VisualRoot as Window;
+        if (parentWindow == null)
+            return;
         
         var window = new NewTagWindow();
         await window.ShowDialog(parentWindow);
@@ -29,7 +31,7 @@ public partial class NavBar : UserControl
     /**TODO:
      * récupérer images avec n tags (ET) OU is done
      */
-    private void ImageButton_Handler(object? sender, RoutedEventArgs e)
+    private void Add_Image_Click(object? sender, RoutedEventArgs e)
     {
         throw new System.NotImplementedException();
     }

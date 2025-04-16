@@ -25,14 +25,14 @@ public class NewTagViewModel : INotifyPropertyChanged
         set { _tagParent = value; OnPropertyChanged(nameof(TagParent)); }
     }
 
-    private ObservableCollection<string> _tags = new();
+    private ObservableCollection<string> _tags;
     public ObservableCollection<string> Tags
     {
         get => _tags;
         set { _tags = value; OnPropertyChanged(nameof(Tags)); }
     }
 
-    private string _message = string.Empty;
+    private string _message;
     public string Message
     {
         get => _message;
@@ -48,6 +48,12 @@ public class NewTagViewModel : INotifyPropertyChanged
 
     public NewTagViewModel()
     {
+        _tagName = string.Empty;
+        _tagParent = string.Empty;
+        _tags = new();
+        _message = string.Empty;
+        _messageColor = new SolidColorBrush(Colors.Black);
+        
         RefreshTags();
     }
 
