@@ -58,7 +58,7 @@ public partial class NewTagWindow : Window
         }
         
         ViewModel.SetMessage("Le tag '" + tagName + "' a été ajouté!", GREEN);
-        ViewModel.RefreshTags();
+        TagRepository.Refresh();
     }
     
     private void Close_Click(object? sender, RoutedEventArgs e)

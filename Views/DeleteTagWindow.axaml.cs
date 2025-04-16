@@ -18,6 +18,7 @@ public partial class DeleteTagWindow : Window
     public DeleteTagWindow()
     {
         InitializeComponent();
+        DataContext = ViewModel;
     }
 
     private void Delete_Click(object? sender, RoutedEventArgs e)
@@ -25,7 +26,7 @@ public partial class DeleteTagWindow : Window
         string tagName = ViewModel.TagName;
         DatabaseManager.removeTag(tagName);
         ViewModel.SetMessage("Le tag '" + tagName + "' a été supprimé!", GREEN);
-        ViewModel.RefreshTags();
+        TagRepository.Refresh();
     }
 
     private void Close_Click(object? sender, RoutedEventArgs e)
