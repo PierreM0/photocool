@@ -7,8 +7,8 @@
     <Menu>
         <MenuItem Header="Tag">
             <MenuItem Header="Ajouter" Click="Add_Tag_Click"></MenuItem>
-            <MenuItem Header="Modifier"></MenuItem>
-            <MenuItem Header="Supprimer"></MenuItem>
+            <MenuItem Header="Modifier" Click="Modify_Tag_Click"></MenuItem>
+            <MenuItem Header="Supprimer" Click="Delete_Tag_Click"></MenuItem>
         </MenuItem>
         
         <MenuItem Header="Image">

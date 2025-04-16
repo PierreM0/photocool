@@ -5,10 +5,8 @@ using photocool.DB;
 
 namespace photocool.ViewModels;
 
-public class NewTagViewModel : INotifyPropertyChanged
+public class NewTagViewModel : ViewModel
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     private string _tagName;
     public string TagName
     {
@@ -70,10 +68,5 @@ public class NewTagViewModel : INotifyPropertyChanged
     {
         Message = message;
         MessageColor = color;
-    }
-
-    public void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

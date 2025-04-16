@@ -28,6 +28,17 @@ public partial class NavBar : UserControl
         var window = new NewTagWindow();
         await window.ShowDialog(parentWindow);
     }
+    
+    private void Modify_Tag_Click(object? sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+    
+    private void Delete_Tag_Click(object? sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
+    }
+    
     /**TODO:
      * récupérer images avec n tags (ET) OU is done
      */
