@@ -18,13 +18,13 @@
         
         <StackPanel Margin="10" Spacing="10">
             <TextBlock Text="Nom du tag à modifier : "></TextBlock>
-            <AutoCompleteBox ItemsSource="{Binding Tags}" SelectedItem="{Binding TagToModify}"></AutoCompleteBox>
+            <AutoCompleteBox ItemsSource="{Binding Tags}" Text="{Binding TagToModify}"></AutoCompleteBox>
             
             <TextBlock Text="Nouveau nom du tag : "></TextBlock>
             <TextBox Text="{Binding NewTagName}"></TextBox>
         
             <TextBlock Text="Nouveau parent du tag : "></TextBlock>
-            <AutoCompleteBox ItemsSource="{Binding Tags}" SelectedItem="{Binding NewTagParent}"></AutoCompleteBox>
+            <AutoCompleteBox ItemsSource="{Binding Tags}" Text="{Binding NewTagParent}"></AutoCompleteBox>
             <TextBlock TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         </StackPanel>
     </DockPanel>

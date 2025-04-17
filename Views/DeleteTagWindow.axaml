@@ -18,7 +18,7 @@
         
         <StackPanel Margin="10" Spacing="10">
             <TextBlock Text="Nom du tag à supprimer : "></TextBlock>
-            <AutoCompleteBox ItemsSource="{Binding Tags}" SelectedItem="{Binding TagName}"></AutoCompleteBox>
+            <AutoCompleteBox   ItemsSource="{Binding Tags}" Text="{Binding TagName}"></AutoCompleteBox>
             <TextBlock TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         </StackPanel>
     </DockPanel>

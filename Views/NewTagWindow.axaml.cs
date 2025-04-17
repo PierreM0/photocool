@@ -27,35 +27,30 @@ public partial class NewTagWindow : Window
         string tagName = ViewModel.TagName;
         string tagParent = ViewModel.TagParent;
 
+        if (string.IsNullOrWhiteSpace(tagName))
+        {
+            ViewModel.SetMessage("Veuillez spécifier le nom du nouveau tag!", RED);
+            return;
+        }
+
+        if (DatabaseManager.getTagId(tagName) != -1)
+        {
+            ViewModel.SetMessage("Le tag '" + tagName + "' existe déjà!", RED);
+            return;
+        }
+        
         if (string.IsNullOrWhiteSpace(tagParent))
         {
-            ViewModel.SetMessage("Le tag parent spécifié n'existe pas!", RED);
+            tagParent = TagRepository.Root;
+        }
+
+        if (DatabaseManager.getTagId(tagParent) == -1)
+        {
+            ViewModel.SetMessage("Le tag '" + tagParent + "' n'existe pas!", RED);
             return;
         }
 
-        if (tagName == tagParent)
-        {
-            ViewModel.SetMessage("Un tag ne peut pas être parent de lui-même!", RED);
-            return;
-        }
-
-        try
-        {
-            DatabaseManager.addTagWithParent(tagName, tagParent);
-        }
-        catch (MySqlException ex)
-        {
-            if (ex.Number == DatabaseManager.DUPLICATE_ENTRY)
-            {
-                ViewModel.SetMessage("Le tag '" + tagName + "' existe déjà !", RED);
-            }
-            else
-            {
-                ViewModel.SetMessage("Une erreur est survenue.", RED);
-            }
-
-            return;
-        }
+        DatabaseManager.addTagWithParent(tagName, tagParent);
         
         ViewModel.SetMessage("Le tag '" + tagName + "' a été ajouté!", GREEN);
         TagRepository.Refresh();

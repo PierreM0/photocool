@@ -28,7 +28,7 @@ public partial class DeleteTagWindow : Window
         
         if (string.IsNullOrWhiteSpace(tagName))
         {
-            ViewModel.SetMessage("Ce tag n'existe pas!", RED);
+            ViewModel.SetMessage("Veuillez spécifier un tag à supprimer!", RED);
             return;
         }
 
@@ -37,8 +37,15 @@ public partial class DeleteTagWindow : Window
             ViewModel.SetMessage("Vous ne pouvez pas supprimer le tag racine!", RED);
             return;
         }
+
+        if (DatabaseManager.getTagId(tagName) == -1)
+        {
+            ViewModel.SetMessage("Le tag '" + tagName + "' n'existe pas!", RED);
+            return;
+        }
         
         DatabaseManager.removeTag(tagName);
+        
         ViewModel.SetMessage("Le tag '" + tagName + "' a été supprimé!", GREEN);
         TagRepository.Refresh();
     }
