@@ -59,10 +59,10 @@ CREATE TABLE `TagImages` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `tag_famille`
+-- Structure de la table `TagFamille`
 --
 
-CREATE TABLE `tag_famille` (
+CREATE TABLE `TagFamille` (
   `tag_fils` int(11) NOT NULL,
   `tag_parent` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -93,7 +93,7 @@ ALTER TABLE `TagImages`
   ADD KEY `tag_id` (`tag_id`);
 
 --
--- Index pour la table `tag_famille`
+-- Index pour la table `TagFamille`
 --
 ALTER TABLE `TagFamille`
   ADD PRIMARY KEY (`tag_fils`,`tag_parent`),
