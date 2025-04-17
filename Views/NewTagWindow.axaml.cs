@@ -38,18 +38,19 @@ public partial class NewTagWindow : Window
             ViewModel.SetMessage("Le tag '" + tagName + "' existe déjà!", RED);
             return;
         }
-
+        
+        if (string.IsNullOrWhiteSpace(tagParent))
+        {
+            DatabaseManager.addTag(tagName);
+        }
+        
         if (DatabaseManager.getTagId(tagParent) == -1)
         {
             ViewModel.SetMessage("Le tag '" + tagParent + "' n'existe pas!", RED);
             return;
         }
-
-        if (string.IsNullOrWhiteSpace(tagParent))
-        {
-            DatabaseManager.addTag(tagName);
-        }
-        else
+        
+        if (!string.IsNullOrWhiteSpace(tagParent))
         {
             DatabaseManager.addTagWithParent(tagName, tagParent);
         }
