@@ -95,7 +95,7 @@ ALTER TABLE `TagImages`
 --
 -- Index pour la table `tag_famille`
 --
-ALTER TABLE `tag_famille`
+ALTER TABLE `TagFamille`
   ADD PRIMARY KEY (`tag_fils`,`tag_parent`),
   ADD KEY `tag_parent` (`tag_parent`);
 
