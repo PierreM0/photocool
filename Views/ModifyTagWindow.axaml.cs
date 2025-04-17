@@ -23,9 +23,9 @@ public partial class ModifyTagWindow : Window
 
     private void Modify_Click(object? sender, RoutedEventArgs e)
     {
-        string tagToModify = ViewModel.TagToModify;
-        string newTagName = ViewModel.NewTagName;
-        string newTagParent = ViewModel.NewTagParent;
+        string tagToModify = ViewModel.TagToModify.Trim();
+        string newTagName = ViewModel.NewTagName.Trim();
+        string newTagParent = ViewModel.NewTagParent.Trim();
 
         bool nameModified = false;
 

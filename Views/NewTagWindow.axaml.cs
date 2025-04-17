@@ -24,10 +24,10 @@ public partial class NewTagWindow : Window
     
     private void Add_Click(object? sender, RoutedEventArgs e)
     {
-        string tagName = ViewModel.TagName;
-        string tagParent = ViewModel.TagParent;
+        string tagName = ViewModel.TagName.Trim();
+        string tagParent = ViewModel.TagParent.Trim();
 
-        if (tagName == string.Empty || tagParent == string.Empty)
+        if (string.IsNullOrEmpty(tagName) || string.IsNullOrEmpty(tagParent))
         {
             ViewModel.SetMessage("Veuillez renseignez tous les champs!", RED);
             return;

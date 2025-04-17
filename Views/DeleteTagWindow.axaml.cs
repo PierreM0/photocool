@@ -23,7 +23,8 @@ public partial class DeleteTagWindow : Window
 
     private void Delete_Click(object? sender, RoutedEventArgs e)
     {
-        string tagName = ViewModel.TagName;
+        string tagName = ViewModel.TagName.Trim();
+        
         if (string.IsNullOrEmpty(tagName))
         {
             ViewModel.SetMessage("Veuillez renseigner le nom du tag à supprimer !", RED);

@@ -49,10 +49,7 @@ public partial class NavBar : UserControl
         await window.ShowDialog(parentWindow);
     }
     
-    /**TODO:
-     * récupérer images avec n tags (ET) OU is done
-     */
-    private void Add_Image_Click(object? sender, RoutedEventArgs e)
+    private void Import_Image_Click(object? sender, RoutedEventArgs e)
     {
         throw new System.NotImplementedException();
     }

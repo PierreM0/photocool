@@ -12,7 +12,7 @@
         </MenuItem>
         
         <MenuItem Header="Image">
-            <MenuItem Header="Ajouter" Click="Add_Image_Click"></MenuItem>
+            <MenuItem Header="Importer" Click="Import_Image_Click"></MenuItem>
             <MenuItem Header="Modifier"></MenuItem>
             <MenuItem Header="Supprimer"></MenuItem>
         </MenuItem>

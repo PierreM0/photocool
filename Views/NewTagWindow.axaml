@@ -21,7 +21,7 @@
             <TextBox Text="{Binding TagName}"></TextBox>
         
             <TextBlock Text="Parent du tag : "></TextBlock>
-            <ComboBox IsTextSearchEnabled="True" ItemsSource="{Binding Tags}" SelectedItem="{Binding TagParent}" Width="280"></ComboBox>
+            <AutoCompleteBox ItemsSource="{Binding Tags}" SelectedItem="{Binding TagParent}"></AutoCompleteBox>
             <TextBlock TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         </StackPanel>
     </DockPanel>
