@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -23,11 +24,17 @@ public partial class DeleteTagWindow : Window
 
     private void Delete_Click(object? sender, RoutedEventArgs e)
     {
-        string tagName = ViewModel.TagName.Trim();
+        string tagName = ViewModel.TagName;
         
-        if (string.IsNullOrEmpty(tagName))
+        if (string.IsNullOrWhiteSpace(tagName))
         {
-            ViewModel.SetMessage("Veuillez renseigner le nom du tag à supprimer !", RED);
+            ViewModel.SetMessage("Ce tag n'existe pas!", RED);
+            return;
+        }
+
+        if (tagName == TagRepository.Root)
+        {
+            ViewModel.SetMessage("Vous ne pouvez pas supprimer le tag racine!", RED);
             return;
         }
         

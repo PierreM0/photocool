@@ -15,38 +15,29 @@ public partial class NavBar : UserControl
     {
         InitializeComponent();
     }
-    
-    /**
-     * Tags done.
-     */
-    private async void Add_Tag_Click(object? sender, RoutedEventArgs e)
+
+    private async void OpenWindowAndShowDialog(Window window)
     {
         Window? parentWindow = this.VisualRoot as Window;
         if (parentWindow == null)
             return;
         
-        var window = new NewTagWindow();
         await window.ShowDialog(parentWindow);
     }
     
-    private async void Modify_Tag_Click(object? sender, RoutedEventArgs e)
+    private void Add_Tag_Click(object? sender, RoutedEventArgs e)
     {
-        Window? parentWindow = this.VisualRoot as Window;
-        if (parentWindow == null)
-            return;
-        
-        var window = new ModifyTagWindow();
-        await window.ShowDialog(parentWindow);
+        OpenWindowAndShowDialog(new NewTagWindow());
     }
     
-    private async void Delete_Tag_Click(object? sender, RoutedEventArgs e)
+    private void Modify_Tag_Click(object? sender, RoutedEventArgs e)
     {
-        Window? parentWindow = this.VisualRoot as Window;
-        if (parentWindow == null)
-            return;
-        
-        var window = new DeleteTagWindow();
-        await window.ShowDialog(parentWindow);
+        OpenWindowAndShowDialog(new ModifyTagWindow());
+    }
+    
+    private void Delete_Tag_Click(object? sender, RoutedEventArgs e)
+    {
+        OpenWindowAndShowDialog(new DeleteTagWindow());
     }
     
     private void Import_Image_Click(object? sender, RoutedEventArgs e)

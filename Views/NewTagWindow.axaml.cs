@@ -24,12 +24,12 @@ public partial class NewTagWindow : Window
     
     private void Add_Click(object? sender, RoutedEventArgs e)
     {
-        string tagName = ViewModel.TagName.Trim();
-        string tagParent = ViewModel.TagParent.Trim();
+        string tagName = ViewModel.TagName;
+        string tagParent = ViewModel.TagParent;
 
-        if (string.IsNullOrEmpty(tagName) || string.IsNullOrEmpty(tagParent))
+        if (string.IsNullOrWhiteSpace(tagParent))
         {
-            ViewModel.SetMessage("Veuillez renseignez tous les champs!", RED);
+            ViewModel.SetMessage("Le tag parent spécifié n'existe pas!", RED);
             return;
         }
 

@@ -23,27 +23,39 @@ public partial class ModifyTagWindow : Window
 
     private void Modify_Click(object? sender, RoutedEventArgs e)
     {
-        string tagToModify = ViewModel.TagToModify.Trim();
-        string newTagName = ViewModel.NewTagName.Trim();
-        string newTagParent = ViewModel.NewTagParent.Trim();
+        string tagToModify = ViewModel.TagToModify;
+        string newTagName = ViewModel.NewTagName;
+        string newTagParent = ViewModel.NewTagParent;
 
         bool nameModified = false;
 
-        if (string.IsNullOrEmpty(tagToModify))
+        if (string.IsNullOrWhiteSpace(tagToModify))
         {
-            ViewModel.SetMessage("Veuillez renseignez le tag à modifier !", RED);
+            ViewModel.SetMessage("Le tag à modifier n'existe pas!", RED);
             return;
         }
 
-        if (string.IsNullOrEmpty(newTagName) && string.IsNullOrEmpty(newTagParent))
+        if (tagToModify == TagRepository.Root)
         {
-            ViewModel.SetMessage("Veuillez renseignez une modification à effectuer !", RED);
+            ViewModel.SetMessage("Vous ne pouvez pas modifier le tag racine!", RED);
+        }
+
+        if (DatabaseManager.getTagId(newTagName) != -1)
+        {
+            ViewModel.SetMessage("Le tag '" + newTagName + "' existe déjà!", RED);
             return;
         }
 
-        if (!string.IsNullOrEmpty(newTagName))
+        if (string.IsNullOrWhiteSpace(newTagParent))
+        {
+            ViewModel.SetMessage("Le tag parent spécifié n'existe pas!", RED);
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(newTagName))
         {
             DatabaseManager.modifyTag(tagToModify, newTagName);
+            tagToModify = newTagName;
             nameModified = true;
             ViewModel.SetMessage("Le nom du tag a été modifié !", GREEN);
             TagRepository.Refresh();

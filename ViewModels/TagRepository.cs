@@ -5,7 +5,9 @@ namespace photocool.ViewModels;
 
 public class TagRepository
 {
-    public static ObservableCollection<string> Tags { get; set; } = new ObservableCollection<string>();
+    public static ObservableCollection<string> Tags { get; } = new();
+
+    public const string Root = "root";
 
     public static void Refresh()
     {
