@@ -44,14 +44,14 @@ public partial class NewTagWindow : Window
             DatabaseManager.addTag(tagName);
         }
         
-        if (DatabaseManager.getTagId(tagParent) == -1)
-        {
-            ViewModel.SetMessage("Le tag '" + tagParent + "' n'existe pas!", RED);
-            return;
-        }
-        
         if (!string.IsNullOrWhiteSpace(tagParent))
         {
+            if (DatabaseManager.getTagId(tagParent) == -1)
+            {
+                ViewModel.SetMessage("Le tag '" + tagParent + "' n'existe pas!", RED);
+                return;
+            }
+            
             DatabaseManager.addTagWithParent(tagName, tagParent);
         }
         
