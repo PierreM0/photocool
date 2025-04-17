@@ -31,7 +31,7 @@ USE photocool;
 CREATE TABLE `Images` (
   `id` int(11) NOT NULL,
   `nom` varchar(10) NOT NULL,
-  `image` blob NOT NULL
+  `image` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -127,11 +127,11 @@ ALTER TABLE `TagImages`
   ADD CONSTRAINT `TagImages_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `tag_famille`
+-- Contraintes pour la table `TagFamille`
 --
-ALTER TABLE `tag_famille`
-  ADD CONSTRAINT `tag_famille_ibfk_1` FOREIGN KEY (`tag_fils`) REFERENCES `Tag` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `tag_famille_ibfk_2` FOREIGN KEY (`tag_parent`) REFERENCES `Tag` (`id`) ON DELETE CASCADE;
+ALTER TABLE `TagFamille`
+  ADD CONSTRAINT `TagFamille_ibfk_1` FOREIGN KEY (`tag_fils`) REFERENCES `Tag` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `TagFamille_ibfk_2` FOREIGN KEY (`tag_parent`) REFERENCES `Tag` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -14,10 +14,11 @@ public class DatabaseManager
     public const int DUPLICATE_ENTRY = 1062;
     
     private static readonly string _connectionString = "Server=localhost;Port=3306;Database=photocool;Uid=root;Pwd=root;";
-/// <summary>
-/// Fonction qui renvoie tout les tags dans un reader 
-/// </summary>
-/// <returns>MySqlDataReader</returns>
+    
+    /// <summary>
+    /// Fonction qui renvoie tout les tags dans un reader 
+    /// </summary>
+    /// <returns>MySqlDataReader</returns>
     public static List<string> getAllTags()
     {
         List<string> tags = new List<string>();
@@ -36,12 +37,12 @@ public class DatabaseManager
         }
         return tags;
     }
-/// <summary>
-/// Fonction qui ajoute un tag et renvoi son id.
-/// </summary>
-/// <param name="tag">tag à ajouter</param>
-/// <returns>id du tag ajouté, -1 en cas d'erreur.</returns>
 
+    /// <summary>
+    /// Fonction qui ajoute un tag et renvoi son id.
+    /// </summary>
+    /// <param name="tag">tag à ajouter</param>
+    /// <returns>id du tag ajouté, -1 en cas d'erreur.</returns>
     public static long addTag(string tag)
     {
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -91,7 +92,7 @@ public class DatabaseManager
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "UPDATE `tag_famille` SET `tag_parent`=@idparent WHERE `tag_fils`=@idtag";
+            string query = "UPDATE `TagFamille` SET `tag_parent`=@idparent WHERE `tag_fils`=@idtag";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@idtag", id);
@@ -101,10 +102,10 @@ public class DatabaseManager
         }
     }
     
-/// <summary>
-/// Fonction qui supprime un tag avec son tag de la bdd
-/// </summary>
-/// <param name="tag">String</param>
+    /// <summary>
+    /// Fonction qui supprime un tag avec son tag de la bdd
+    /// </summary>
+    /// <param name="tag">String</param>
     public static void removeTag(string tag)
     {
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -125,25 +126,27 @@ public class DatabaseManager
             }
         }
     }
-/// <summary>
-///  Ajoute un tag à la bdd et l'associe à un parent.
-/// </summary>
-/// <param name="tag">Tag à ajouter</param>
-/// <param name="parent">Tag du parent.</param>
-/// <returns>ID du tag ajouté</returns>
+
+    /// <summary>
+    ///  Ajoute un tag à la bdd et l'associe à un parent.
+    /// </summary>
+    /// <param name="tag">Tag à ajouter</param>
+    /// <param name="parent">Tag du parent.</param>
+    /// <returns>ID du tag ajouté</returns>
     public static long addTagWithParent(string tag, string parent)
     {
         long id = addTag(tag);
         addParentToTag(tag, parent);
         return id;
     }
-/// <summary>
-/// ajoute un parent au tag
-/// </summary>
-/// <param name="tag">tag fils</param>
-/// <param name="parent">tag parent</param>
-/// <returns>l'id de la ligne de la relation en bdd</returns>
-/// <exception cref="Exception">si l'un des deux tags n'existe pas</exception>
+
+    /// <summary>
+    /// ajoute un parent au tag
+    /// </summary>
+    /// <param name="tag">tag fils</param>
+    /// <param name="parent">tag parent</param>
+    /// <returns>l'id de la ligne de la relation en bdd</returns>
+    /// <exception cref="Exception">si l'un des deux tags n'existe pas</exception>
     public static long addParentToTag(string tag, string parent)
     {
         long id = getTagId(tag);
@@ -155,7 +158,7 @@ public class DatabaseManager
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "INSERT INTO `tag_famille` (`tag_fils`, `tag_parent`) VALUES (@idtag, @idparent);";
+            string query = "INSERT INTO `TagFamille` (`tag_fils`, `tag_parent`) VALUES (@idtag, @idparent);";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@idtag", id);
@@ -173,12 +176,13 @@ public class DatabaseManager
         }
         return -1L;
     }
-/// <summary>
-/// Méthode qui supprime la relation parent enfant dans la bdd
-/// </summary>
-/// <param name="tag">tag fils</param>
-/// <param name="parent">tag parent</param>
-/// <exception cref="Exception">si l'un des deux tags n'existe pas dans la bdd</exception>
+
+    /// <summary>
+    /// Méthode qui supprime la relation parent enfant dans la bdd
+    /// </summary>
+    /// <param name="tag">tag fils</param>
+    /// <param name="parent">tag parent</param>
+    /// <exception cref="Exception">si l'un des deux tags n'existe pas dans la bdd</exception>
     public static void removeParentFromTag(string tag, string parent)
     {
         long id = getTagId(tag);
@@ -190,7 +194,7 @@ public class DatabaseManager
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "DELETE FROM `tag_famille` WHERE `tag`=@tag AND `tag_parent`=@idparent;";
+            string query = "DELETE FROM `TagFamille` WHERE `tag`=@tag AND `tag_parent`=@idparent;";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@idparent", parentId);
@@ -201,11 +205,12 @@ public class DatabaseManager
         }
 
     }
-/// <summary>
-/// renvoie l'id du tag passé en paramètre
-/// </summary>
-/// <param name="tag">le tag de l'id cherché</param>
-/// <returns>l'id du tag cherché -1 si il n'existe pas.</returns>
+
+    /// <summary>
+    /// renvoie l'id du tag passé en paramètre
+    /// </summary>
+    /// <param name="tag">le tag de l'id cherché</param>
+    /// <returns>l'id du tag cherché -1 si il n'existe pas.</returns>
     public static long getTagId(string tag)
     {
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -222,12 +227,13 @@ public class DatabaseManager
             }
         }
     }
-/// <summary>
-/// renvoie les enfants directs d'un tag
-/// </summary>
-/// <param name="tag">tag donné</param>
-/// <param name="childs"> dictionnaire des enfants, peut être null</param>
-/// <returns>le dictionnaire des enfants du tags (paire ID,Tag)</returns>
+
+    /// <summary>
+    /// renvoie les enfants directs d'un tag
+    /// </summary>
+    /// <param name="tag">tag donné</param>
+    /// <param name="childs"> dictionnaire des enfants, peut être null</param>
+    /// <returns>le dictionnaire des enfants du tags (paire ID,Tag)</returns>
     public static Dictionary<long,string> getChildsOfTag(string tag,Dictionary<long,string> childs=null)
     {
         if (childs is null)
@@ -241,7 +247,7 @@ public class DatabaseManager
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM `tag_famille` WHERE `tag_parent`=@tag";
+                string query = "SELECT * FROM `TagFamille` WHERE `tag_parent`=@tag";
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@tag", id);
@@ -259,11 +265,12 @@ public class DatabaseManager
             }
         return childs;
     }
-/// <summary>
-/// renvoie le tag à partir d'un id bdd,renvoi un string vide s'il n'existe pas
-/// </summary>
-/// <param name="id">id du tag</param>
-/// <returns>tag du tag</returns>
+
+    /// <summary>
+    /// renvoie le tag à partir d'un id bdd,renvoi un string vide s'il n'existe pas
+    /// </summary>
+    /// <param name="id">id du tag</param>
+    /// <returns>tag du tag</returns>
     public static string getTag(long id)
     {
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -285,13 +292,14 @@ public class DatabaseManager
         }
         return "";
     }
-/// <summary>
-/// ajoute une image en bdd
-/// </summary>
-/// <param name="imagePath">chemin du fichier de l'image</param>
-/// <param name="tag">tag à ajouter à l'image</param>
-/// <param name="nom">nom de l'image</param>
-/// <returns>l'id de l'image insérée</returns>
+
+    /// <summary>
+    /// ajoute une image en bdd
+    /// </summary>
+    /// <param name="imagePath">chemin du fichier de l'image</param>
+    /// <param name="tag">tag à ajouter à l'image</param>
+    /// <param name="nom">nom de l'image</param>
+    /// <returns>l'id de l'image insérée</returns>
     public static long addImage(string imagePath, string tag, string nom)
     {
         byte[] imageData = File.ReadAllBytes(imagePath);
@@ -312,14 +320,15 @@ public class DatabaseManager
         addTagToImage(nom, tag, id);
         return id;
     }
-/// <summary>
-/// ajoute un tag à une image
-/// </summary>
-/// <param name="nom">nom de l'image</param>
-/// <param name="tag">tag a ajouter</param>
-/// <param name="imageId">id de l'image (optionnel mais accelère)</param>
-/// <param name="tagId">id du tag (optionnel mais accelère)</param>
-/// <returns> l'id de la relation créée</returns>
+
+    /// <summary>
+    /// ajoute un tag à une image
+    /// </summary>
+    /// <param name="nom">nom de l'image</param>
+    /// <param name="tag">tag a ajouter</param>
+    /// <param name="imageId">id de l'image (optionnel mais accelère)</param>
+    /// <param name="tagId">id du tag (optionnel mais accelère)</param>
+    /// <returns> l'id de la relation créée</returns>
     public static long addTagToImage(string nom, string tag,long imageId =-1L, long tagId=-1L)
     {
         long tagImageId = -1L;
@@ -347,6 +356,7 @@ public class DatabaseManager
         }
         return tagImageId;
     }
+
     /// <summary>
     /// Donne l'id d'une image avec son nom
     /// </summary>
@@ -373,11 +383,12 @@ public class DatabaseManager
         }
         return imageId;
     }
-/// <summary>
-/// enlève une image de la bdd
-/// </summary>
-/// <param name="nom">nom de l'image</param>
-/// <param name="imageId">id de l'image (optionnel)</param>
+    
+    /// <summary>
+    /// enlève une image de la bdd
+    /// </summary>
+    /// <param name="nom">nom de l'image</param>
+    /// <param name="imageId">id de l'image (optionnel)</param>
     public static void removeImage(string nom, long imageId = -1L)
     {
         if (imageId == -1L)
@@ -396,13 +407,14 @@ public class DatabaseManager
             }
         }
     }
-/// <summary>
-/// Enleve un tag d'une image
-/// </summary>
-/// <param name="nom">nom de l'image</param>
-/// <param name="tag">tag de l'image</param>
-/// <param name="imageId">id de l'immage (optionnel)</param>
-/// <param name="tagId">id du tag (optionnel)</param>
+
+    /// <summary>
+    /// Enleve un tag d'une image
+    /// </summary>
+    /// <param name="nom">nom de l'image</param>
+    /// <param name="tag">tag de l'image</param>
+    /// <param name="imageId">id de l'immage (optionnel)</param>
+    /// <param name="tagId">id du tag (optionnel)</param>
     public static void removeTagFromImage(string nom, string tag, long imageId = -1L, long tagId = -1L)
     {
         if(imageId == -1L)
@@ -421,6 +433,7 @@ public class DatabaseManager
             }
         }
     }
+
     /// <summary>
     /// Récupère les images avec les tags spécifiés
     /// </summary>
