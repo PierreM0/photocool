@@ -38,11 +38,6 @@ public partial class NewTagWindow : Window
             ViewModel.SetMessage("Le tag '" + tagName + "' existe déjà!", RED);
             return;
         }
-        
-        if (string.IsNullOrWhiteSpace(tagParent))
-        {
-            tagParent = TagRepository.Root;
-        }
 
         if (DatabaseManager.getTagId(tagParent) == -1)
         {
@@ -50,7 +45,14 @@ public partial class NewTagWindow : Window
             return;
         }
 
-        DatabaseManager.addTagWithParent(tagName, tagParent);
+        if (string.IsNullOrWhiteSpace(tagParent))
+        {
+            DatabaseManager.addTag(tagName);
+        }
+        else
+        {
+            DatabaseManager.addTagWithParent(tagName, tagParent);
+        }
         
         ViewModel.SetMessage("Le tag '" + tagName + "' a été ajouté!", GREEN);
         TagRepository.Refresh();

@@ -32,12 +32,6 @@ public partial class DeleteTagWindow : Window
             return;
         }
 
-        if (tagName == TagRepository.Root)
-        {
-            ViewModel.SetMessage("Vous ne pouvez pas supprimer le tag racine!", RED);
-            return;
-        }
-
         if (DatabaseManager.getTagId(tagName) == -1)
         {
             ViewModel.SetMessage("Le tag '" + tagName + "' n'existe pas!", RED);

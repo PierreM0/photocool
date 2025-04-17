@@ -34,12 +34,6 @@ public partial class ModifyTagWindow : Window
             ViewModel.SetMessage("Veuillez renseigner le tag à modifier!", RED);
             return;
         }
-
-        if (tagToModify == TagRepository.Root)
-        {
-            ViewModel.SetMessage("Vous ne pouvez pas modifier le tag racine!", RED);
-            return;
-        }
         
         if (DatabaseManager.getTagId(tagToModify) == -1)
         {
