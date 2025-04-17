@@ -20,8 +20,6 @@ public partial class ListPills : UserControl
     {
         InitializeComponent();
     }
-    
-    public int MaxRendered { get; set; } = 2;
 
     private static Dictionary<string, IBrush> pillColors = new();
     private static List<Pill> _list = new();
@@ -52,22 +50,7 @@ public partial class ListPills : UserControl
             }
 
             _list.Add(pill);
-            
-            if (PillContainer.Children.Count < MaxRendered)
-            {
-                PillContainer.Children.Add(pill);
-            } 
-
-
-            else if (PillContainer.Children.Count == MaxRendered)
-            {
-                PillContainer.Children.Add(new Pill()
-                {
-                    Text = "...",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                });
-            }
+            PillContainer.Children.Add(pill);
         });
     }
 }

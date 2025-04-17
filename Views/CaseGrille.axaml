@@ -8,6 +8,5 @@
     <StackPanel Orientation="Vertical">
         <Image HorizontalAlignment="Center" Source="/Assets/daisy_ia.png" Width="100" Height="100"></Image>
         <Label HorizontalAlignment="Center">image</Label>
-        <views:ListPills MaxRendered="3" />
     </StackPanel>
 </UserControl>

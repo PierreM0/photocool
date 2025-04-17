@@ -1,4 +1,5 @@
 using System;
+using Avalonia;
 using Avalonia.Controls;
 
 namespace photocool.Views;
@@ -13,14 +14,16 @@ public partial class MainWindow : Window
         const int NB_COLUMNS = 4;
         const int NB_ROWS = 7;
 
+        Grille.Margin = new Thickness(20);
+
         for (int i = 0; i < NB_ROWS; i++)
         {
-            Grille.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Auto) });
+            Grille.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
         }
         
         for (int i = 0; i < NB_COLUMNS; i++)
         {
-            Grille.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
+            Grille.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
         }
 
         for (int i = 0; i < NB_IMAGES; i++)
