@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Tracing;
 using System.Threading;
 using Avalonia.Controls;
@@ -14,8 +15,6 @@ namespace photocool.Views;
 
 public partial class ListPills : UserControl
 {
-    
-    
     public ListPills()
     {
         InitializeComponent();

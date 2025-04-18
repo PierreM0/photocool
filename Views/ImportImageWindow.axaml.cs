@@ -8,22 +8,26 @@ namespace photocool.Views;
 
 public partial class ImportImageWindow : Window
 {
-    private ImportImageViewModel ViewModel;
+    private ImportImageViewModel ViewModel = new();
     
     public ImportImageWindow()
     {
         InitializeComponent();
-        ViewModel = new(this);
         DataContext = ViewModel;
     }
 
     private void Select_Image_Click(object? sender, RoutedEventArgs e)
     {
-        ViewModel.HandleSelectImage();
+        ViewModel.HandleSelectImage(this.VisualRoot as Window);
     }
 
     private void Import_Click(object? sender, RoutedEventArgs e)
     {
-        ViewModel.HandleImport();
+        ViewModel.HandleImport(Bar.PillsList.List);
+    }
+
+    private void Close_Click(object? sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }

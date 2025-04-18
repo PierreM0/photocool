@@ -1,9 +1,12 @@
 using System;
+using System.Collections.ObjectModel;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Reactive;
 using photocool.ViewModels;
 
 namespace photocool.Views;
@@ -18,6 +21,7 @@ public partial class SearchBar: UserControl
         DataContext = ViewModel;
         AjoutFiltre.ItemsSource = TagRepository.Tags;
     }
+
 
     private void NewFilter_OnClick(object? sender, RoutedEventArgs e)
     {

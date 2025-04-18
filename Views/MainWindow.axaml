@@ -22,11 +22,9 @@
     <DockPanel Width="800" Height="600">
         <v:NavBar DockPanel.Dock="Top"/>
         <DockPanel Name="Panel">
-            <v:SearchBar DockPanel.Dock="Top" Margin="10"/>
-            <Grid Name="ImageGrid"></Grid>
-           
+            <v:SearchBar DockPanel.Dock="Top" Name="Bar" Margin="10"/>
             <ScrollViewer>
-                <Grid Name="Grille"></Grid>
+                <Grid Name="ImageGrid"></Grid>
             </ScrollViewer>
         </DockPanel>
     </DockPanel>

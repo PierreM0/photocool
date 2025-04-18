@@ -14,7 +14,7 @@
         
         <Grid Grid.Row="1" ColumnDefinitions="* ,*" Margin="0,0,0,15">
             <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="0,0,10,0">
-                <Image Name="ImagePreview" Stretch="Uniform"></Image>
+                <Image Name="ImagePreview" Source="{Binding ImageSource}" Stretch="Uniform"></Image>
             </Border>
             
             <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="10">
@@ -27,7 +27,7 @@
         
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
             <Button Content="Importer" Click="Import_Click" Background="#8A2BE2" Foreground="White"/>
-            <Button Content="Fermer"/>
+            <Button Content="Fermer" Click="Close_Click"/>
         </StackPanel>
         
         <TextBlock Grid.Row="3" TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>

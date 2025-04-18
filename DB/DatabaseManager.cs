@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using Avalonia.Win32.Interop.Automation;
 using MySql.Data.MySqlClient;
+using photocool.Models;
 using Tmds.DBus.Protocol;
 
 namespace photocool.DB;
@@ -437,9 +438,9 @@ public class DatabaseManager
     /// </summary>
     /// <param name="tagIds">liste d'id des tags, si aucun tag n'est fourni, récupère toute les images</param>
     /// <returns>un dictionnaire contenant nom et data de l'image.</returns>
-    public static Dictionary<string, byte[]> getImages(List<long> tagIds = null)
+    public static List<ImagePhotocool> getImages(List<long> tagIds = null)
     {
-        Dictionary<string, byte[]> images = new Dictionary<string, byte[]>();
+        List<ImagePhotocool> images = new();
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
@@ -467,7 +468,7 @@ public class DatabaseManager
                     while (reader.Read())
                     {
                         byte[] imageData = (byte[])reader["image"];
-                        images.Add(reader.GetString("nom"), imageData);
+                        images.Add(new ImagePhotocool(reader.GetString("nom"), imageData));
                     }
                 }
             }

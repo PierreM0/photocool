@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -11,8 +12,14 @@ namespace photocool.ViewModels;
 
 public class ImportImageViewModel : ViewModel
 {
-    private ImportImageWindow _window;
     private string _imagePath;
+    
+    private Bitmap _imageSource;
+    public Bitmap ImageSource
+    {
+        get => _imageSource;
+        set { _imageSource = value; OnPropertyChanged(nameof(ImageSource)); }
+    }
     
     private string _imageName;
     public string ImageName
@@ -35,41 +42,30 @@ public class ImportImageViewModel : ViewModel
         set { _messageColor = value; OnPropertyChanged(nameof(MessageColor)); }
     }
     
-    public ImportImageViewModel(ImportImageWindow window)
+    public ImportImageViewModel()
     {
         TagRepository.Refresh();
-        _window = window;
+        _imageSource = null;
         _imagePath = string.Empty;
         _message = string.Empty;
     }
 
-    private List<string> GetChosenTags()
-    {
-        List<string> tags = new();
-        foreach (Pill pill in _window.Bar.PillsList.List)
-        {
-            tags.Add(pill.Text);
-        }
-        Console.WriteLine(tags.Count);
-        return tags;
-    }
-
-    public async void HandleSelectImage()
+    public async void HandleSelectImage(Window parentWindow)
     {
         OpenFileDialog dialog = new();
         dialog.Filters.Add(new FileDialogFilter() { Name = "Images", Extensions = { "jpeg", "jpg" } });
         
-        string[]? result = await dialog.ShowAsync(_window);
+        string[]? result = await dialog.ShowAsync(parentWindow);
         if (result != null && result.Length > 0)
         {
             string path = result[0];
             Bitmap bitmap = new Bitmap(path);
-            _window.ImagePreview.Source = bitmap;
+            ImageSource = bitmap;
             _imagePath = path;
         }
     }
 
-    public void HandleImport()
+    public void HandleImport(List<Pill> pills)
     {
         if (string.IsNullOrEmpty(_imagePath))
         {
@@ -89,13 +85,11 @@ public class ImportImageViewModel : ViewModel
             return;
         }
         
-        List<string> tags = GetChosenTags();
-        
         DatabaseManager.addImage(_imagePath, ImageName);
 
-        foreach (string tag in tags)
+        foreach (Pill pill in pills)
         {
-            DatabaseManager.addTagToImage(ImageName, tag);
+            DatabaseManager.addTagToImage(ImageName, pill.Text);
         }
         
         SetMessage("L'image a été ajoutée avec succès!", GREEN);
