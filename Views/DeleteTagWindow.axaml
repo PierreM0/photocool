@@ -12,13 +12,13 @@
     
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
-            <Button Content="Supprimer" Click="Delete_Click"></Button>
+            <Button Content="Supprimer" Background="#8A2BE2" Foreground="White" Click="Delete_Click"></Button>
             <Button Content="Fermer" Click="Close_Click"></Button>
         </StackPanel>
         
         <StackPanel Margin="10" Spacing="10">
             <TextBlock Text="Nom du tag à supprimer : "></TextBlock>
-            <AutoCompleteBox   ItemsSource="{Binding Tags}" Text="{Binding TagName}"></AutoCompleteBox>
+            <AutoCompleteBox MaxLength="30" ItemsSource="{Binding Tags}" Text="{Binding TagName}"></AutoCompleteBox>
             <TextBlock TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         </StackPanel>
     </DockPanel>

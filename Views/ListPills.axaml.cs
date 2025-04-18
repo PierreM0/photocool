@@ -22,13 +22,13 @@ public partial class ListPills : UserControl
     }
 
     private static Dictionary<string, IBrush> pillColors = new();
-    private static List<Pill> _list = new();
+    public List<Pill> List { get; }= new();
     public void Add(Pill pill)
     {
         
         pill.AddHandler(PointerPressedEvent, ((object sender, PointerPressedEventArgs e) =>
         {
-            _list.Remove(pill);
+            List.Remove(pill);
             PillContainer.Children.Remove(pill);
         }), RoutingStrategies.Tunnel);
         
@@ -44,12 +44,12 @@ public partial class ListPills : UserControl
             }
 
             // pas deux fois le meme filtre dans la liste
-            foreach (var p in _list)
+            foreach (var p in List)
             {
                 if (p.Text == pill.Text) return;
             }
 
-            _list.Add(pill);
+            List.Add(pill);
             PillContainer.Children.Add(pill);
         });
     }

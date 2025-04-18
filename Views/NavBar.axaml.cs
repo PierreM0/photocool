@@ -42,6 +42,6 @@ public partial class NavBar : UserControl
     
     private void Import_Image_Click(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        OpenWindowAndShowDialog(new ImportImageWindow());
     }
 }

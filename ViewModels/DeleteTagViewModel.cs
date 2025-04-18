@@ -43,7 +43,29 @@ public class DeleteTagViewModel : ViewModel
         TagRepository.Refresh();
     }
 
-    public void SetMessage(string message, Brush color)
+    public void HandleDelete()
+    {
+        string tagName = TagName;
+        
+        if (string.IsNullOrWhiteSpace(tagName))
+        {
+            SetMessage("Veuillez spécifier un tag à supprimer!", RED);
+            return;
+        }
+
+        if (DatabaseManager.getTagId(tagName) == -1)
+        {
+            SetMessage("Le tag '" + tagName + "' n'existe pas!", RED);
+            return;
+        }
+        
+        DatabaseManager.removeTag(tagName);
+        
+        SetMessage("Le tag '" + tagName + "' a été supprimé!", GREEN);
+        TagRepository.Refresh();
+    }
+
+    private void SetMessage(string message, Brush color)
     {
         Message = message;
         MessageColor = color;

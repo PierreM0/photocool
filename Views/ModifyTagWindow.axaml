@@ -12,19 +12,19 @@
     
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
-            <Button Content="Modifier" Click="Modify_Click"></Button>
+            <Button Content="Modifier" Background="#8A2BE2" Foreground="White" Click="Modify_Click"></Button>
             <Button Content="Fermer" Click="Close_Click"></Button>
         </StackPanel>
         
         <StackPanel Margin="10" Spacing="10">
             <TextBlock Text="Nom du tag à modifier : "></TextBlock>
-            <AutoCompleteBox ItemsSource="{Binding Tags}" Text="{Binding TagToModify}"></AutoCompleteBox>
+            <AutoCompleteBox MaxLength="30" ItemsSource="{Binding Tags}" Text="{Binding TagToModify}"></AutoCompleteBox>
             
             <TextBlock Text="Nouveau nom du tag : "></TextBlock>
-            <TextBox Text="{Binding NewTagName}"></TextBox>
+            <TextBox MaxLength="30" Text="{Binding NewTagName}"></TextBox>
         
             <TextBlock Text="Nouveau parent du tag : "></TextBlock>
-            <AutoCompleteBox ItemsSource="{Binding Tags}" Text="{Binding NewTagParent}"></AutoCompleteBox>
+            <AutoCompleteBox MaxLength="30" ItemsSource="{Binding Tags}" Text="{Binding NewTagParent}"></AutoCompleteBox>
             <TextBlock TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         </StackPanel>
     </DockPanel>

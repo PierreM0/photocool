@@ -10,7 +10,8 @@
         Icon="/Assets/avalonia-logo.ico"
         Width="800"
         Height="600"
-        Title="photocool">
+        Title="photocool"
+        Background="#f5f5f7">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -21,7 +22,7 @@
     <DockPanel Width="800" Height="600">
         <v:NavBar DockPanel.Dock="Top"/>
         <DockPanel Name="Panel">
-            <v:SearchBar DockPanel.Dock="Top"/>
+            <v:SearchBar DockPanel.Dock="Top" Margin="10"/>
             <Grid Name="ImageGrid"></Grid>
            
             <ScrollViewer>

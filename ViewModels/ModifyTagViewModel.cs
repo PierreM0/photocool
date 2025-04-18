@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Media;
+using photocool.DB;
 
 namespace photocool.ViewModels;
 
@@ -56,7 +57,78 @@ public class ModifyTagViewModel : ViewModel
         TagRepository.Refresh();
     }
 
-    public void SetMessage(string message, Brush color)
+    public void HandleModify()
+    {
+        string tagToModify = TagToModify;
+        string newTagName = NewTagName;
+        string newTagParent = NewTagParent;
+        
+        bool nameModified = false;
+
+        if (string.IsNullOrWhiteSpace(tagToModify))
+        {
+            SetMessage("Veuillez renseigner le tag à modifier!", RED);
+            return;
+        }
+        
+        if (DatabaseManager.getTagId(tagToModify) == -1)
+        {
+            SetMessage("Le tag '" + tagToModify + "' n'existe pas!", RED);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(newTagName) && string.IsNullOrWhiteSpace(newTagParent))
+        {
+            SetMessage("Veuillez renseigner au moins une modification à effectuer!", RED);
+            return;
+        }
+        
+        if (!string.IsNullOrWhiteSpace(newTagName) && DatabaseManager.getTagId(newTagName) != -1)
+        {
+            SetMessage("Le tag '" + newTagName + "' existe déjà!", RED);
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(newTagParent) && DatabaseManager.getTagId(newTagParent) == -1)
+        {
+            SetMessage("Le tag '" + newTagParent + "' n'existe pas!", RED);
+            return;
+        }
+
+        if (tagToModify == newTagParent)
+        {
+            SetMessage("Le tag à modifier et le nouveau parent ne peuvent pas avoir le même nom!", RED);
+            return;
+        }
+
+        if (newTagName == newTagParent)
+        {
+            SetMessage("Le nouveau nom du tag et le nouveau parent ne peuvent pas avoir le même nom!", RED);
+            return;
+        }
+        
+        if (!string.IsNullOrWhiteSpace(newTagName))
+        {
+            DatabaseManager.modifyTag(tagToModify, newTagName);
+            tagToModify = newTagName;
+            
+            SetMessage("Le nom du tag a été modifié!", GREEN);
+            nameModified = true;
+        }
+
+        if (!string.IsNullOrWhiteSpace(newTagParent))
+        {
+            DatabaseManager.modifyTagParent(tagToModify, newTagParent);
+            
+            SetMessage("Le parent du tag a été modifié!", GREEN);
+            if (nameModified)
+            {
+                SetMessage("Le nom et le parent du tag ont été modifiés!", GREEN);
+            }
+        }
+    }
+
+    private void SetMessage(string message, Brush color)
     {
         Message = message;
         MessageColor = color;

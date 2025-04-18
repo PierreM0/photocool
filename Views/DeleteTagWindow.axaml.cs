@@ -11,9 +11,6 @@ namespace photocool.Views;
 
 public partial class DeleteTagWindow : Window
 {
-    private static Brush RED = new SolidColorBrush(Colors.Red);
-    private static Brush GREEN = new SolidColorBrush(Colors.Green);
-
     private DeleteTagViewModel ViewModel { get; } = new();
     
     public DeleteTagWindow()
@@ -24,24 +21,7 @@ public partial class DeleteTagWindow : Window
 
     private void Delete_Click(object? sender, RoutedEventArgs e)
     {
-        string tagName = ViewModel.TagName;
-        
-        if (string.IsNullOrWhiteSpace(tagName))
-        {
-            ViewModel.SetMessage("Veuillez spécifier un tag à supprimer!", RED);
-            return;
-        }
-
-        if (DatabaseManager.getTagId(tagName) == -1)
-        {
-            ViewModel.SetMessage("Le tag '" + tagName + "' n'existe pas!", RED);
-            return;
-        }
-        
-        DatabaseManager.removeTag(tagName);
-        
-        ViewModel.SetMessage("Le tag '" + tagName + "' a été supprimé!", GREEN);
-        TagRepository.Refresh();
+        ViewModel.HandleDelete();
     }
 
     private void Close_Click(object? sender, RoutedEventArgs e)

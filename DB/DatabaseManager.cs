@@ -297,10 +297,9 @@ public class DatabaseManager
     /// ajoute une image en bdd
     /// </summary>
     /// <param name="imagePath">chemin du fichier de l'image</param>
-    /// <param name="tag">tag à ajouter à l'image</param>
     /// <param name="nom">nom de l'image</param>
     /// <returns>l'id de l'image insérée</returns>
-    public static long addImage(string imagePath, string tag, string nom)
+    public static long addImage(string imagePath, string nom)
     {
         byte[] imageData = File.ReadAllBytes(imagePath);
         long id = -1L;
@@ -317,7 +316,6 @@ public class DatabaseManager
             }
             
         }
-        addTagToImage(nom, tag, id);
         return id;
     }
 

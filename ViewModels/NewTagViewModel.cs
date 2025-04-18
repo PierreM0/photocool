@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Media;
+using photocool.DB;
 
 namespace photocool.ViewModels;
 
@@ -48,7 +49,44 @@ public class NewTagViewModel : ViewModel
         TagRepository.Refresh();
     }
 
-    public void SetMessage(string message, Brush color)
+    public void HandleAdd()
+    {
+        string tagName = TagName;
+        string tagParent = TagParent;
+
+        if (string.IsNullOrWhiteSpace(tagName))
+        {
+            SetMessage("Veuillez spécifier le nom du nouveau tag!", RED);
+            return;
+        }
+
+        if (DatabaseManager.getTagId(tagName) != -1)
+        {
+            SetMessage("Le tag '" + tagName + "' existe déjà!", RED);
+            return;
+        }
+        
+        if (string.IsNullOrWhiteSpace(tagParent))
+        {
+            DatabaseManager.addTag(tagName);
+        }
+        
+        if (!string.IsNullOrWhiteSpace(tagParent))
+        {
+            if (DatabaseManager.getTagId(tagParent) == -1)
+            {
+                SetMessage("Le tag '" + tagParent + "' n'existe pas!", RED);
+                return;
+            }
+            
+            DatabaseManager.addTagWithParent(tagName, tagParent);
+        }
+        
+        SetMessage("Le tag '" + tagName + "' a été ajouté!", GREEN);
+        TagRepository.Refresh();
+    }
+
+    private void SetMessage(string message, Brush color)
     {
         Message = message;
         MessageColor = color;

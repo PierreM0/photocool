@@ -12,16 +12,16 @@
     
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
-            <Button Content="Ajouter" Click="Add_Click"></Button>
+            <Button Content="Ajouter" Background="#8A2BE2" Foreground="White" Click="Add_Click"></Button>
             <Button Content="Fermer" Click="Close_Click"></Button>
         </StackPanel>
         
         <StackPanel Margin="10" Spacing="10">
             <TextBlock Text="Nom du nouveau tag : "></TextBlock>
-            <TextBox Text="{Binding TagName}"></TextBox>
+            <TextBox MaxLength="30" Text="{Binding TagName}"></TextBox>
         
             <TextBlock Text="Parent du tag : "></TextBlock>
-            <AutoCompleteBox ItemsSource="{Binding Tags}" Text="{Binding TagParent}"></AutoCompleteBox>
+            <AutoCompleteBox MaxLength="30" ItemsSource="{Binding Tags}" Text="{Binding TagParent}"></AutoCompleteBox>
             <TextBlock TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
         </StackPanel>
     </DockPanel>

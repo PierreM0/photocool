@@ -4,24 +4,27 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using photocool.ViewModels;
 
 namespace photocool.Views;
 
 public partial class SearchBar: UserControl
 {
+    private SearchBarViewModel ViewModel = new();
+    
     public SearchBar()
     {
         InitializeComponent();
-    }
-
-    private void AjoutFiltre_OnKeyUp(object? sender, KeyEventArgs e)
-    {
-        
+        DataContext = ViewModel;
+        AjoutFiltre.ItemsSource = TagRepository.Tags;
     }
 
     private void NewFilter_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (AjoutFiltre.Text == null)
+        if (string.IsNullOrWhiteSpace(AjoutFiltre.Text))
+            return;
+
+        if (!TagRepository.Contains(AjoutFiltre.Text))
             return;
         
         Pill pill = new();
@@ -40,6 +43,8 @@ public partial class SearchBar: UserControl
         pill.HorizontalAlignment = HorizontalAlignment.Center;
         pill.VerticalAlignment = VerticalAlignment.Center;
         
-        PillsList.Add(pill);    
+        PillsList.Add(pill);
+
+        AjoutFiltre.Text = "";
     }
 }
