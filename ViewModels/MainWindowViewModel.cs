@@ -12,14 +12,7 @@ public class MainWindowViewModel : ViewModel
     
     public void HandleRefreshImageGrid(List<Pill> pills, Grid imageGrid)
     {
-        List<ImagePhotocool> images = new();
-        
-        if (pills.Count == 0)
-        {
-            images = DatabaseManager.getImages();
-        }
-        
-        int numImages = images.Count;
+        int numImages = 50;
         int numRows = numImages / NumColumns + 1;
         
         for (int i = 0; i < numRows; i++)
@@ -33,7 +26,7 @@ public class MainWindowViewModel : ViewModel
         }
 
         int counter = 0;
-        foreach (ImagePhotocool image in images)
+        foreach (ImagePhotocool image in DatabaseManager.getImagesStream())
         {
             int row = counter / NumColumns;
             int col = counter % NumColumns;

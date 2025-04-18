@@ -434,13 +434,12 @@ public class DatabaseManager
     }
 
     /// <summary>
-    /// Récupère les images avec les tags spécifiés
+    /// Récupère les images avec les tags spécifiés (en stream car images volumineuses)
     /// </summary>
     /// <param name="tagIds">liste d'id des tags, si aucun tag n'est fourni, récupère toute les images</param>
     /// <returns>un dictionnaire contenant nom et data de l'image.</returns>
-    public static List<ImagePhotocool> getImages(List<long> tagIds = null)
+    public static IEnumerable<ImagePhotocool> getImagesStream(List<long> tagIds = null)
     {
-        List<ImagePhotocool> images = new();
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
@@ -468,12 +467,10 @@ public class DatabaseManager
                     while (reader.Read())
                     {
                         byte[] imageData = (byte[])reader["image"];
-                        images.Add(new ImagePhotocool(reader.GetString("nom"), imageData));
+                        yield return new ImagePhotocool(reader.GetString("nom"), imageData);
                     }
                 }
             }
         }
-
-        return images;
     }
 }
