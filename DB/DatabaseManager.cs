@@ -433,34 +433,103 @@ public class DatabaseManager
         }
     }
 
-    /// <summary>
-    /// Récupère les images avec les tags spécifiés (en stream car images volumineuses)
-    /// </summary>
-    /// <param name="tagIds">liste d'id des tags, si aucun tag n'est fourni, récupère toute les images</param>
-    /// <returns>un dictionnaire contenant nom et data de l'image.</returns>
-    public static IEnumerable<ImagePhotocool> getImagesStream(List<long> tagIds = null)
+    public static IEnumerable<ImagePhotocool> getAllImagesAsStream()
     {
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query;
-            if(tagIds is null)
-                query = "SELECT * FROM  Images";
-            else
-            {
-                var ids = tagIds.Select((id,l) =>$"@id{l}" ).ToList();
-                string inClause = string.Join(",", ids);
-                query = $"SELECT DISTINCT i.id, i.nom, i.image FROM `Images` i INNER JOIN `TagImages` ti ON i.id = ti.image_id INNER JOIN Tag t ON t.id = ti.tag_id WHERE t.id IN ({inClause});";
-                
-            }
-
+            string query = "SELECT * FROM `Images`";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                if(tagIds is not null)
-                    for (int i = 0; i < tagIds.Count; i++)
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
                     {
-                        command.Parameters.AddWithValue($"@id{i}", tagIds[i]);
+                        byte[] imageData = (byte[])reader["image"];
+                        yield return new ImagePhotocool(reader.GetString("nom"), imageData);
                     }
+                }
+            }   
+        }
+    }
+    
+    public static IEnumerable<ImagePhotocool> getImagesMustSatisfyFiltersAsStream(List<string> filters, bool anyFilter)
+    {
+        List<long> ids = new List<long>();
+        foreach (string tag in filters)
+        {
+            ids.Add(getTagId(tag));
+        }
+        
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            string query;
+
+            query = "SELECT * FROM `TagFamille`";
+            Dictionary<long, long> relations = new();
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        relations.Add(reader.GetInt64("tag_fils"), reader.GetInt64("tag_parent"));
+                    }
+                }
+            }
+            
+            Console.WriteLine("BBB");
+
+            Dictionary<long, List<long>> hierarchy = new();
+            foreach (KeyValuePair<long, long> relation in relations)
+            {
+                if (!hierarchy.ContainsKey(relation.Value)) // Key = fils, Value = parent
+                {
+                    hierarchy.Add(relation.Value, new List<long>());
+                }
+                hierarchy[relation.Value].Add(relation.Key);
+            }
+            
+            List<long> relevantIds = new();
+            foreach (long id in ids)
+            {
+                relevantIds.Add(id);
+                AddDescendants(id, hierarchy, relevantIds);
+            }
+            
+            // pour insérer l'array dans la query il faut bind chaque élément:
+            List<string> paramIds = new();
+            for (int i = 0; i < relevantIds.Count; i++)
+            {
+                paramIds.Add("@id" + i);
+            }
+            
+            string tagIds = string.Join(", ", paramIds);
+            if (anyFilter)
+                query = $"SELECT * FROM `Images` JOIN `TagImages` ON `id` = `image_id` WHERE `tag_id` IN ({tagIds})";
+            else
+            {
+                query = $@"
+                        SELECT i.*, COUNT(DISTINCT ti.tag_id) as tag_match_count
+                        FROM Images i
+                        JOIN TagImages ti ON i.id = ti.image_id
+                        WHERE ti.tag_id IN ({tagIds})
+                        GROUP BY i.id
+                        HAVING COUNT(DISTINCT ti.tag_id) = @TagCount
+                        ";
+            }
+            
+            Console.WriteLine(query);
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                for (int i = 0; i < relevantIds.Count; i++)
+                {
+                    command.Parameters.AddWithValue(paramIds[i], relevantIds[i]);
+                }
+                
+                if (!anyFilter)
+                    command.Parameters.AddWithValue("@TagCount", ids.Count);
 
                 using (var reader = command.ExecuteReader())
                 {
@@ -470,6 +539,19 @@ public class DatabaseManager
                         yield return new ImagePhotocool(reader.GetString("nom"), imageData);
                     }
                 }
+            }
+        }
+    }
+
+    private static void AddDescendants(long parentId, Dictionary<long, List<long>> hierarchy, List<long> relevantIds)
+    {
+        if (hierarchy.ContainsKey(parentId))
+        {
+            List<long> childrenIds = hierarchy[parentId];
+            foreach (long childId in childrenIds)
+            {
+                relevantIds.Add(childId);
+                AddDescendants(childId, hierarchy, relevantIds);
             }
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using photocool.ViewModels;
 
 namespace photocool.Views;
@@ -14,10 +15,12 @@ public partial class MainWindow : Window
         InitializeComponent();
         ViewModel = new();
         DataContext = ViewModel;
-        RefreshImageGrid();
+        
+        RefreshImageGrid(null, null);
+        Bar.NewFilter.Click += RefreshImageGrid;
     }
 
-    public void RefreshImageGrid()
+    public void RefreshImageGrid(object? sender, RoutedEventArgs e)
     {
         ViewModel.HandleRefreshImageGrid(Bar.PillsList.List, ImageGrid);
     }

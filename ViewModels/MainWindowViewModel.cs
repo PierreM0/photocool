@@ -12,22 +12,42 @@ public class MainWindowViewModel : ViewModel
     
     public void HandleRefreshImageGrid(List<Pill> pills, Grid imageGrid)
     {
-        int numImages = 50;
-        int numRows = numImages / NumColumns + 1;
-        
-        for (int i = 0; i < numRows; i++)
-        {
-            imageGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-        }
+        imageGrid.Children.Clear();
+        imageGrid.RowDefinitions.Clear();
+        imageGrid.ColumnDefinitions.Clear();
         
         for (int i = 0; i < NumColumns; i++)
         {
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
         }
 
-        int counter = 0;
-        foreach (ImagePhotocool image in DatabaseManager.getImagesStream())
+        List<string> filters = new();
+        foreach (Pill pill in pills)
         {
+            filters.Add(pill.Text);
+        }
+
+        int counter = 0;
+        int colCounter = 0;
+
+        IEnumerable<ImagePhotocool> images;
+        if (filters.Count > 0)
+        {
+            images = DatabaseManager.getImagesMustSatisfyFiltersAsStream(filters, false);
+        }
+        else
+        {
+            images = DatabaseManager.getAllImagesAsStream();
+        }
+        
+        foreach (ImagePhotocool image in images)
+        {
+            if (colCounter >= NumColumns)
+            {
+                imageGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
+                colCounter = 0;
+            }
+            
             int row = counter / NumColumns;
             int col = counter % NumColumns;
             ImageCard imageCard = new(image.Name, image.Data);
@@ -35,6 +55,7 @@ public class MainWindowViewModel : ViewModel
             Grid.SetColumn(imageCard, col);
             imageGrid.Children.Add(imageCard);
             counter++;
+            colCounter++;
         }
     }
 }
