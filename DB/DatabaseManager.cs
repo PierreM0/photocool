@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using Avalonia.Win32.Interop.Automation;
 using MySql.Data.MySqlClient;
 using photocool.Models;
-using Tmds.DBus.Protocol;
 
 namespace photocool.DB;
 
@@ -452,8 +449,72 @@ public class DatabaseManager
             }   
         }
     }
+
+    public static IEnumerable<ImagePhotocool> getImagesMustSatisfyAnyFilterAsStream(List<string> filters)
+    {
+        List<long> ids = new List<long>();
+        foreach (string tag in filters)
+        {
+            ids.Add(getTagId(tag));
+        }
+        
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            
+            // get all tag relations
+            string query = "SELECT * FROM `TagFamille`";
+            Dictionary<long, long> relations = new();
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        relations.Add(reader.GetInt64("tag_fils"), reader.GetInt64("tag_parent"));
+                    }
+                }
+            }
+            
+            // create tag hierarchy
+            Dictionary<long, HashSet<long>> hierarchy = new();
+            foreach (KeyValuePair<long, long> relation in relations) // key is child, value is parent
+            {
+                if (!hierarchy.ContainsKey(relation.Value))
+                    hierarchy.Add(relation.Value, new HashSet<long>());
+                hierarchy[relation.Value].Add(relation.Key);
+            }
+            
+            // get relevant ids
+            HashSet<long> relevantIds = new();
+            foreach (long id in ids)
+            {
+                relevantIds.Add(id);
+                AddDescendants(id, hierarchy, relevantIds);
+            }
+
+            query = $@"SELECT *
+                        FROM `Images`
+                        WHERE id IN (
+                            SELECT DISTINCT image_id
+                            FROM `TagImages`
+                            WHERE tag_id IN ({ string.Join(", ", relevantIds)})
+                        )";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        byte[] imageData = (byte[])reader["image"];
+                        yield return new ImagePhotocool(reader.GetString("nom"), imageData);
+                    }
+                }
+            }
+        }
+    }
     
-    public static IEnumerable<ImagePhotocool> getImagesMustSatisfyFiltersAsStream(List<string> filters, bool anyFilter)
+    public static IEnumerable<ImagePhotocool> getImagesMustSatisfyAllFiltersAsStream(List<string> filters)
     {
         List<long> ids = new List<long>();
         foreach (string tag in filters)
@@ -466,6 +527,7 @@ public class DatabaseManager
             connection.Open();
             string query;
 
+            // get all tag relations
             query = "SELECT * FROM `TagFamille`";
             Dictionary<long, long> relations = new();
             using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -479,75 +541,100 @@ public class DatabaseManager
                 }
             }
             
-            Console.WriteLine("BBB");
-
-            Dictionary<long, List<long>> hierarchy = new();
-            foreach (KeyValuePair<long, long> relation in relations)
-            {
-                if (!hierarchy.ContainsKey(relation.Value)) // Key = fils, Value = parent
-                {
-                    hierarchy.Add(relation.Value, new List<long>());
-                }
-                hierarchy[relation.Value].Add(relation.Key);
-            }
-            
-            List<long> relevantIds = new();
-            foreach (long id in ids)
-            {
-                relevantIds.Add(id);
-                AddDescendants(id, hierarchy, relevantIds);
-            }
-            
-            // pour insérer l'array dans la query il faut bind chaque élément:
-            List<string> paramIds = new();
-            for (int i = 0; i < relevantIds.Count; i++)
-            {
-                paramIds.Add("@id" + i);
-            }
-            
-            string tagIds = string.Join(", ", paramIds);
-            if (anyFilter)
-                query = $"SELECT * FROM `Images` JOIN `TagImages` ON `id` = `image_id` WHERE `tag_id` IN ({tagIds})";
-            else
-            {
-                query = $@"
-                        SELECT i.*, COUNT(DISTINCT ti.tag_id) as tag_match_count
-                        FROM Images i
-                        JOIN TagImages ti ON i.id = ti.image_id
-                        WHERE ti.tag_id IN ({tagIds})
-                        GROUP BY i.id
-                        HAVING COUNT(DISTINCT ti.tag_id) = @TagCount
-                        ";
-            }
-            
-            Console.WriteLine(query);
+            // get all image tags
+            Dictionary<long, HashSet<long>> imageTags = new();
+            query = "SELECT image_id, tag_id FROM `TagImages`";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                for (int i = 0; i < relevantIds.Count; i++)
-                {
-                    command.Parameters.AddWithValue(paramIds[i], relevantIds[i]);
-                }
-                
-                if (!anyFilter)
-                    command.Parameters.AddWithValue("@TagCount", ids.Count);
-
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        byte[] imageData = (byte[])reader["image"];
-                        yield return new ImagePhotocool(reader.GetString("nom"), imageData);
+                        long imageId = reader.GetInt64("image_id");
+                        long tagId = reader.GetInt64("tag_id");
+                        
+                        if (!imageTags.ContainsKey(imageId))
+                            imageTags.Add(imageId, new HashSet<long>());
+                        
+                        imageTags[imageId].Add(tagId);
+                    }
+                }
+            }
+            
+            // remove parent tags from image tags
+            foreach (HashSet<long> tags in imageTags.Values)
+            {
+                RemoveParentTags(tags, relations);
+            }
+            
+            // create tag hierarchy
+            Dictionary<long, HashSet<long>> hierarchy = new();
+            foreach (KeyValuePair<long, long> relation in relations) // key is child, value is parent
+            {
+                if (!hierarchy.ContainsKey(relation.Value))
+                    hierarchy.Add(relation.Value, new HashSet<long>());
+                hierarchy[relation.Value].Add(relation.Key);
+            }
+            
+            // get relevant ids
+            HashSet<long> relevantIds = new(ids);
+            RemoveParentTags(relevantIds, relations);
+            foreach (long id in relevantIds.ToList()) // ToList else operation exception (modifying while iterating)
+            {
+                AddDescendants(id, hierarchy, relevantIds);
+            }
+
+            // go through all images and apply filters
+            query = "SELECT * FROM `Images`";
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        long imageId = reader.GetInt64("id");
+                        HashSet<long> tags = imageTags[imageId];
+                        if (tags.All(tag => relevantIds.Contains(tag)))
+                        {
+                            byte[] imageData = (byte[])reader["image"];
+                            yield return new ImagePhotocool(reader.GetString("nom"), imageData);
+                        }
                     }
                 }
             }
         }
     }
 
-    private static void AddDescendants(long parentId, Dictionary<long, List<long>> hierarchy, List<long> relevantIds)
+    private static void RemoveParentTags(HashSet<long> tags, Dictionary<long, long> relations)
+    {
+        HashSet<long> tagsToRemove = new();
+
+        foreach (long id in tags)
+        {
+            long current = id;
+            while (relations.ContainsKey(current))
+            {
+                long parent = relations[current];
+                if (tags.Contains(parent))
+                {
+                    tagsToRemove.Add(parent);
+                }
+
+                current = parent;
+            }
+        }
+
+        foreach (long id in tagsToRemove)
+        {
+            tags.Remove(id);
+        }
+    }
+
+    private static void AddDescendants(long parentId, Dictionary<long, HashSet<long>> hierarchy, HashSet<long> relevantIds)
     {
         if (hierarchy.ContainsKey(parentId))
         {
-            List<long> childrenIds = hierarchy[parentId];
+            HashSet<long> childrenIds = hierarchy[parentId];
             foreach (long childId in childrenIds)
             {
                 relevantIds.Add(childId);

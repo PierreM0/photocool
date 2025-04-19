@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using photocool.DB;
 using photocool.Models;
@@ -16,6 +17,7 @@ public class MainWindowViewModel : ViewModel
         imageGrid.RowDefinitions.Clear();
         imageGrid.ColumnDefinitions.Clear();
         
+        imageGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         for (int i = 0; i < NumColumns; i++)
         {
             imageGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
@@ -31,25 +33,27 @@ public class MainWindowViewModel : ViewModel
         int colCounter = 0;
 
         IEnumerable<ImagePhotocool> images;
-        if (filters.Count > 0)
+        if (filters.Count == 0)
         {
-            images = DatabaseManager.getImagesMustSatisfyFiltersAsStream(filters, false);
+            images = DatabaseManager.getAllImagesAsStream();
         }
         else
         {
-            images = DatabaseManager.getAllImagesAsStream();
+            images = DatabaseManager.getImagesMustSatisfyAnyFilterAsStream(filters);
         }
         
         foreach (ImagePhotocool image in images)
         {
             if (colCounter >= NumColumns)
             {
+                Console.WriteLine("Adding row!");
                 imageGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
                 colCounter = 0;
             }
             
             int row = counter / NumColumns;
             int col = counter % NumColumns;
+            Console.WriteLine(row + ", " + col);
             ImageCard imageCard = new(image.Name, image.Data);
             Grid.SetRow(imageCard, row);
             Grid.SetColumn(imageCard, col);

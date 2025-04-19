@@ -19,7 +19,7 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <DockPanel Width="800" Height="600">
+    <DockPanel>
         <v:NavBar DockPanel.Dock="Top"/>
         <DockPanel Name="Panel">
             <v:SearchBar DockPanel.Dock="Top" Name="Bar" Margin="10"/>
