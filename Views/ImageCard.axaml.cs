@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -12,9 +13,22 @@ public partial class ImageCard : UserControl
     { 
         InitializeComponent();
         ImageName.Content = imageName;
-        using (var memoryStream = new MemoryStream(imageData))
-        {
-            ImagePreview.Source = new Bitmap(memoryStream);
-        }
+        
+        Bitmap bitmap = new Bitmap(new MemoryStream(imageData));
+        var originalWidth = bitmap.PixelSize.Width;
+        var originalHeight = bitmap.PixelSize.Height;
+        
+        const int maxThumbSize = 125;
+        
+        double ratioX = (double)maxThumbSize / originalWidth;
+        double ratioY = (double)maxThumbSize / originalHeight;
+        double ratio = Math.Min(ratioX, ratioY);
+
+        int scaledWidth = (int)(originalWidth * ratio);
+        int scaledHeight = (int)(originalHeight * ratio);
+        
+        var resizedBitmap = bitmap.CreateScaledBitmap(new PixelSize(scaledWidth, scaledHeight));
+
+        ImagePreview.Source = resizedBitmap;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Google.Protobuf.WellKnownTypes;
 using MySql.Data.MySqlClient;
 using photocool.Models;
 
@@ -579,10 +580,6 @@ public class DatabaseManager
             // get relevant ids
             HashSet<long> relevantIds = new(ids);
             RemoveParentTags(relevantIds, relations);
-            foreach (long id in relevantIds.ToList()) // ToList else operation exception (modifying while iterating)
-            {
-                AddDescendants(id, hierarchy, relevantIds);
-            }
 
             // go through all images and apply filters
             query = "SELECT * FROM `Images`";
@@ -594,7 +591,48 @@ public class DatabaseManager
                     {
                         long imageId = reader.GetInt64("id");
                         HashSet<long> tags = imageTags[imageId];
-                        if (tags.All(tag => relevantIds.Contains(tag)))
+
+                        // check if all tags are satisfied
+                        Dictionary<long, bool> satisfiedIds = new();
+                        foreach (long id in relevantIds)
+                        {
+                            satisfiedIds.Add(id, false);
+                        }
+
+                        bool allSatisfied = true;
+                        foreach (long id in tags)
+                        {
+                            bool found = false;
+                            foreach (long relevantId in relevantIds)
+                            {
+                                if (IsDescendantOrEqualOf(id, relevantId, relations))
+                                {
+                                    satisfiedIds[relevantId] = true;
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                allSatisfied = false;
+                                break;
+                            }
+                        }
+
+                        if (allSatisfied)
+                        {
+                            foreach (KeyValuePair<long, bool> id in satisfiedIds)
+                            {
+                                if (id.Value == false)
+                                {
+                                    allSatisfied = false;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if (allSatisfied)
                         {
                             byte[] imageData = (byte[])reader["image"];
                             yield return new ImagePhotocool(reader.GetString("nom"), imageData);
@@ -641,5 +679,22 @@ public class DatabaseManager
                 AddDescendants(childId, hierarchy, relevantIds);
             }
         }
+    }
+
+    private static bool IsDescendantOrEqualOf(long descendant, long ancestor, Dictionary<long, long> relations)
+    {
+        if (ancestor == descendant)
+            return true;
+        
+        while (relations.ContainsKey(descendant))
+        {
+            long current = relations[descendant];
+            if (current == ancestor)
+                return true;
+            
+            descendant = current;
+        }
+
+        return false;
     }
 }

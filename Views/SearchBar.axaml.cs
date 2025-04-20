@@ -14,6 +14,8 @@ namespace photocool.Views;
 public partial class SearchBar: UserControl
 {
     private SearchBarViewModel ViewModel = new();
+
+    public Action OnPillClick { get; set; } = null;
     
     public SearchBar()
     {
@@ -47,7 +49,7 @@ public partial class SearchBar: UserControl
         pill.HorizontalAlignment = HorizontalAlignment.Center;
         pill.VerticalAlignment = VerticalAlignment.Center;
         
-        PillsList.Add(pill);
+        PillsList.Add(pill, OnPillClick);
 
         AjoutFiltre.Text = "";
     }

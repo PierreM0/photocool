@@ -18,10 +18,15 @@ public partial class MainWindow : Window
         
         RefreshImageGrid(null, null);
         Bar.NewFilter.Click += RefreshImageGrid;
+        Bar.OnPillClick = new Action(() => RefreshImageGrid(null, null));
     }
 
     public void RefreshImageGrid(object? sender, RoutedEventArgs e)
     {
-        ViewModel.HandleRefreshImageGrid(Bar.PillsList.List, ImageGrid);
+        bool anyFilter = false;
+        if (AnyFilterCheck.IsChecked.HasValue)
+            anyFilter = AnyFilterCheck.IsChecked.Value;
+        
+        ViewModel.HandleRefreshImageGrid(Bar.PillsList.List, ImageGrid, anyFilter);
     }
 }

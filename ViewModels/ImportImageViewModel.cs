@@ -93,7 +93,9 @@ public class ImportImageViewModel : ViewModel
         }
         
         SetMessage("L'image a été ajoutée avec succès!", GREEN);
+        ImageSource = null;
         ImageName = string.Empty;
+        _imagePath = string.Empty;
     }
     
     private void SetMessage(string message, Brush color)

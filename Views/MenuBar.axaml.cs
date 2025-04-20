@@ -9,9 +9,9 @@ using photocool.DB;
 
 namespace photocool.Views;
 
-public partial class NavBar : UserControl
+public partial class MenuBar : UserControl
 {
-    public NavBar()
+    public MenuBar()
     {
         InitializeComponent();
     }

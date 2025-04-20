@@ -11,7 +11,7 @@ public class MainWindowViewModel : ViewModel
 {
     private const int NumColumns = 4;
     
-    public void HandleRefreshImageGrid(List<Pill> pills, Grid imageGrid)
+    public void HandleRefreshImageGrid(List<Pill> pills, Grid imageGrid, bool anyFilter)
     {
         imageGrid.Children.Clear();
         imageGrid.RowDefinitions.Clear();
@@ -37,23 +37,25 @@ public class MainWindowViewModel : ViewModel
         {
             images = DatabaseManager.getAllImagesAsStream();
         }
-        else
+        else if (anyFilter)
         {
             images = DatabaseManager.getImagesMustSatisfyAnyFilterAsStream(filters);
+        }
+        else
+        {
+            images = DatabaseManager.getImagesMustSatisfyAllFiltersAsStream(filters);
         }
         
         foreach (ImagePhotocool image in images)
         {
             if (colCounter >= NumColumns)
             {
-                Console.WriteLine("Adding row!");
                 imageGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
                 colCounter = 0;
             }
             
             int row = counter / NumColumns;
             int col = counter % NumColumns;
-            Console.WriteLine(row + ", " + col);
             ImageCard imageCard = new(image.Name, image.Data);
             Grid.SetRow(imageCard, row);
             Grid.SetColumn(imageCard, col);

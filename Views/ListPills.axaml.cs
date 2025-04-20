@@ -22,13 +22,15 @@ public partial class ListPills : UserControl
 
     private static Dictionary<string, IBrush> pillColors = new();
     public List<Pill> List { get; }= new();
-    public void Add(Pill pill)
+    public void Add(Pill pill, Action onPillClick = null)
     {
         
         pill.AddHandler(PointerPressedEvent, ((object sender, PointerPressedEventArgs e) =>
         {
             List.Remove(pill);
             PillContainer.Children.Remove(pill);
+            if (onPillClick != null)
+                onPillClick();
         }), RoutingStrategies.Tunnel);
         
         Dispatcher.UIThread.Invoke(() =>
