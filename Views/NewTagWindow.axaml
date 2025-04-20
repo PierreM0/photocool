@@ -8,11 +8,12 @@
         x:Class="photocool.Views.NewTagWindow"
         Title="Nouveau tag"
         Width="300"
-        Height="250">
+        Height="250"
+        Background="#D6BCA5">
     
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
-            <Button Content="Ajouter" Background="#8A2BE2" Foreground="White" Click="Add_Click"></Button>
+            <Button Content="Ajouter" Background="#B39084" Click="Add_Click"></Button>
             <Button Content="Fermer" Click="Close_Click"></Button>
         </StackPanel>
         

@@ -7,7 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="photocool.Views.ImportImageWindow"
         x:DataType="vm:ImportImageViewModel"
-        Title="Importer une image">
+        Title="Importer une image"
+        Background="#D6BCA5">
     
     <Grid Margin="20" RowDefinitions="Auto, *, Auto, Auto">
         <TextBlock Grid.Row="0" Text="Prévisualisation"></TextBlock>
@@ -26,7 +27,7 @@
         </Grid>
         
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
-            <Button Content="Importer" Click="Import_Click" Background="#8A2BE2" Foreground="White"/>
+            <Button Content="Importer" Click="Import_Click" Background="#B39084"/>
             <Button Content="Fermer" Click="Close_Click"/>
         </StackPanel>
         
