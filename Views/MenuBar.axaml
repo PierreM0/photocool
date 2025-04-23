@@ -13,8 +13,6 @@
         
         <MenuItem Header="Image">
             <MenuItem Header="Importer" Click="Import_Image_Click"></MenuItem>
-            <MenuItem Header="Modifier"></MenuItem>
-            <MenuItem Header="Supprimer"></MenuItem>
         </MenuItem>
     </Menu>
 </UserControl>

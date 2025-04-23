@@ -51,8 +51,8 @@ public class NewTagViewModel : ViewModel
 
     public void HandleAdd()
     {
-        string tagName = TagName;
-        string tagParent = TagParent;
+        string tagName = TagName.Trim();
+        string tagParent = TagParent.Trim();
 
         if (string.IsNullOrWhiteSpace(tagName))
         {

@@ -45,7 +45,7 @@ public class DeleteTagViewModel : ViewModel
 
     public void HandleDelete()
     {
-        string tagName = TagName;
+        string tagName = TagName.Trim();
         
         if (string.IsNullOrWhiteSpace(tagName))
         {

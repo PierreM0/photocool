@@ -59,9 +59,9 @@ public class ModifyTagViewModel : ViewModel
 
     public void HandleModify()
     {
-        string tagToModify = TagToModify;
-        string newTagName = NewTagName;
-        string newTagParent = NewTagParent;
+        string tagToModify = TagToModify.Trim();
+        string newTagName = NewTagName.Trim();
+        string newTagParent = NewTagParent.Trim();
         
         bool nameModified = false;
 
