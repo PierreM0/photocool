@@ -11,7 +11,7 @@ public class MainWindowViewModel : ViewModel
 {
     private const int NumColumns = 4;
     
-    public void HandleRefreshImageGrid(List<Pill> pills, Grid imageGrid, bool anyFilter)
+    public void HandleRefreshImageGrid(List<Pill> pills, Grid imageGrid, bool allFilters)
     {
         imageGrid.Children.Clear();
         imageGrid.RowDefinitions.Clear();
@@ -37,13 +37,13 @@ public class MainWindowViewModel : ViewModel
         {
             images = DatabaseManager.getAllImagesAsStream();
         }
-        else if (anyFilter)
+        else if (allFilters)
         {
-            images = DatabaseManager.getImagesMustSatisfyAnyFilterAsStream(filters);
+            images = DatabaseManager.getImagesMustSatisfyAllFiltersAsStream(filters);
         }
         else
         {
-            images = DatabaseManager.getImagesMustSatisfyAllFiltersAsStream(filters);
+            images = DatabaseManager.getImagesMustSatisfyAnyFilterAsStream(filters);
         }
         
         foreach (ImagePhotocool image in images)

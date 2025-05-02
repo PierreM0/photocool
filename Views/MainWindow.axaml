@@ -23,10 +23,10 @@
         <v:MenuBar Grid.Row="0"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <v:SearchBar Name="Bar" Margin="30,30,30,0"/>
-            <CheckBox Name="AnyFilterCheck" IsChecked="False" Click="RefreshImageGrid" Content="L'image doit respecter un des filtres"></CheckBox>
+            <CheckBox Name="AllFiltersCheck" IsChecked="False" Click="RefreshImageGrid" Content="L'image doit respecter tous les filtres"></CheckBox>
         </StackPanel>
         <ScrollViewer Grid.Row="2" AllowAutoHide="False">
-            <Grid Margin="30, 0" Name="ImageGrid"></Grid>
+            <Grid HorizontalAlignment="Center" Name="ImageGrid"></Grid>
         </ScrollViewer>
     </Grid>
 

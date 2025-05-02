@@ -11,3 +11,7 @@ public class ImagePhotocool
         Data = data;
     }
 }
+
+// TODO afficher liste tags à gauche en hiérarchie avec TreeView
+// TODO sélection multiple ?
+// TODO importer plusieurs images en même temps

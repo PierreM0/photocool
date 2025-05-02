@@ -23,10 +23,10 @@ public partial class MainWindow : Window
 
     public void RefreshImageGrid(object? sender, RoutedEventArgs e)
     {
-        bool anyFilter = false;
-        if (AnyFilterCheck.IsChecked.HasValue)
-            anyFilter = AnyFilterCheck.IsChecked.Value;
+        bool allFilters = false;
+        if (AllFiltersCheck.IsChecked.HasValue)
+            allFilters = AllFiltersCheck.IsChecked.Value;
         
-        ViewModel.HandleRefreshImageGrid(Bar.PillsList.List, ImageGrid, anyFilter);
+        ViewModel.HandleRefreshImageGrid(Bar.PillsList.List, ImageGrid, allFilters);
     }
 }

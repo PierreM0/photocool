@@ -562,12 +562,6 @@ public class DatabaseManager
                 }
             }
             
-            // remove parent tags from image tags
-            foreach (HashSet<long> tags in imageTags.Values)
-            {
-                RemoveParentTags(tags, relations);
-            }
-            
             // create tag hierarchy
             Dictionary<long, HashSet<long>> hierarchy = new();
             foreach (KeyValuePair<long, long> relation in relations) // key is child, value is parent
@@ -579,7 +573,6 @@ public class DatabaseManager
             
             // get relevant ids
             HashSet<long> relevantIds = new(ids);
-            RemoveParentTags(relevantIds, relations);
 
             // go through all images and apply filters
             query = "SELECT * FROM `Images`";
@@ -640,31 +633,6 @@ public class DatabaseManager
                     }
                 }
             }
-        }
-    }
-
-    private static void RemoveParentTags(HashSet<long> tags, Dictionary<long, long> relations)
-    {
-        HashSet<long> tagsToRemove = new();
-
-        foreach (long id in tags)
-        {
-            long current = id;
-            while (relations.ContainsKey(current))
-            {
-                long parent = relations[current];
-                if (tags.Contains(parent))
-                {
-                    tagsToRemove.Add(parent);
-                }
-
-                current = parent;
-            }
-        }
-
-        foreach (long id in tagsToRemove)
-        {
-            tags.Remove(id);
         }
     }
 

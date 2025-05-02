@@ -12,7 +12,7 @@ public partial class ImageCard : UserControl
     public ImageCard(string imageName, byte[] imageData)
     { 
         InitializeComponent();
-        ImageName.Content = imageName;
+        ImageName.Text = imageName;
         
         Bitmap bitmap = new Bitmap(new MemoryStream(imageData));
         var originalWidth = bitmap.PixelSize.Width;
