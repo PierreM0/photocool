@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Avalonia;
 using Avalonia.Controls;
 using photocool.DB;
 using photocool.Models;
@@ -9,29 +11,20 @@ namespace photocool.ViewModels;
 
 public class MainWindowViewModel : ViewModel
 {
-    private const int NumColumns = 4;
+    private const int NumColumns = 8;
+
+    public ObservableCollection<TagNode> TagNodes => TagRepository.TagNodes;
     
-    public void HandleRefreshImageGrid(List<Pill> pills, Grid imageGrid, bool allFilters)
+    public void HandleRefreshImageGrid(List<Pill> pills, WrapPanel imagePanel, bool allFilters)
     {
-        imageGrid.Children.Clear();
-        imageGrid.RowDefinitions.Clear();
-        imageGrid.ColumnDefinitions.Clear();
-        
-        imageGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-        for (int i = 0; i < NumColumns; i++)
-        {
-            imageGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-        }
+        imagePanel.Children.Clear();
 
         List<string> filters = new();
         foreach (Pill pill in pills)
         {
             filters.Add(pill.Text);
         }
-
-        int counter = 0;
-        int colCounter = 0;
-
+        
         IEnumerable<ImagePhotocool> images;
         if (filters.Count == 0)
         {
@@ -48,20 +41,26 @@ public class MainWindowViewModel : ViewModel
         
         foreach (ImagePhotocool image in images)
         {
-            if (colCounter >= NumColumns)
+            ImageCard imageCard = new(image.Data)
             {
-                imageGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(1, GridUnitType.Star) });
-                colCounter = 0;
-            }
-            
-            int row = counter / NumColumns;
-            int col = counter % NumColumns;
-            ImageCard imageCard = new(image.Name, image.Data);
-            Grid.SetRow(imageCard, row);
-            Grid.SetColumn(imageCard, col);
-            imageGrid.Children.Add(imageCard);
-            counter++;
-            colCounter++;
+                Width = 140,
+                Height = 140,
+                Margin = new Thickness(5)
+            };
+            imagePanel.Children.Add(imageCard);
         }
+    }
+
+    public void ExecuteDeparentTag(object? tag)
+    {
+        DatabaseManager.removeParentFromTag((tag as TagNode).Tag);
+        Console.WriteLine((tag as TagNode).Tag);
+        TagRepository.Refresh();
+    }
+
+    public void ExecuteDeleteTag(object? tag)
+    {
+        DatabaseManager.removeTag((tag as TagNode).Tag);
+        TagRepository.Refresh();
     }
 }

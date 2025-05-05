@@ -9,11 +9,10 @@ namespace photocool.Views;
 
 public partial class ImageCard : UserControl
 {
-    public ImageCard(string imageName, byte[] imageData)
+    public ImageCard(byte[] imageData)
     { 
         InitializeComponent();
-        ImageName.Text = imageName;
-        
+
         Bitmap bitmap = new Bitmap(new MemoryStream(imageData));
         var originalWidth = bitmap.PixelSize.Width;
         var originalHeight = bitmap.PixelSize.Height;

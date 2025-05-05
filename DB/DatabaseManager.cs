@@ -37,6 +37,46 @@ public class DatabaseManager
         return tags;
     }
 
+    public static Dictionary<long, long> getTagFamily()
+    {
+        Dictionary<long, long> tagFamily = new();
+        string query = "SELECT * FROM `TagFamille`";
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(query, connection);
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    tagFamily.Add(reader.GetInt64("tag_fils"), reader.GetInt64("tag_parent"));
+                }
+            }
+        }
+
+        return tagFamily;
+    }
+
+    public static Dictionary<long, string> getAllTagsAndIds()
+    {
+        Dictionary<long, string> tagsAndIds = new();
+        string query = "SELECT * FROM `Tag`";
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(query, connection);
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    tagsAndIds.Add(reader.GetInt64("id"), reader.GetString("tag"));
+                }
+            }
+        }
+
+        return tagsAndIds;
+    }
+
     /// <summary>
     /// Fonction qui ajoute un tag et renvoi son id.
     /// </summary>
@@ -180,24 +220,21 @@ public class DatabaseManager
     /// Méthode qui supprime la relation parent enfant dans la bdd
     /// </summary>
     /// <param name="tag">tag fils</param>
-    /// <param name="parent">tag parent</param>
-    /// <exception cref="Exception">si l'un des deux tags n'existe pas dans la bdd</exception>
-    public static void removeParentFromTag(string tag, string parent)
+    /// <exception cref="Exception">si le tag n'existe pas dans la bdd</exception>
+    public static void removeParentFromTag(string tag)
     {
         long id = getTagId(tag);
-        long parentId = getTagId(parent);
-        if (id == -1L || parentId == -1L)
+        if (id == -1L)
         {
-            throw new Exception("Erreur l'un des deux tag n'existe pas");
+            throw new Exception("Erreur le tag n'existe pas");
         }
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "DELETE FROM `TagFamille` WHERE `tag`=@tag AND `tag_parent`=@idparent;";
+            string query = "DELETE FROM `TagFamille` WHERE `tag_fils`=@id;";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@idparent", parentId);
-                command.Parameters.AddWithValue("@tag", tag);
+                command.Parameters.AddWithValue("@id", id);
                 command.ExecuteNonQuery();
             }
             
@@ -444,7 +481,7 @@ public class DatabaseManager
                     while (reader.Read())
                     {
                         byte[] imageData = (byte[])reader["image"];
-                        yield return new ImagePhotocool(reader.GetString("nom"), imageData);
+                        yield return new ImagePhotocool(reader.GetInt64("id"), imageData);
                     }
                 }
             }   
@@ -508,7 +545,7 @@ public class DatabaseManager
                     while (reader.Read())
                     {
                         byte[] imageData = (byte[])reader["image"];
-                        yield return new ImagePhotocool(reader.GetString("nom"), imageData);
+                        yield return new ImagePhotocool(reader.GetInt64("id"), imageData);
                     }
                 }
             }
@@ -628,7 +665,7 @@ public class DatabaseManager
                         if (allSatisfied)
                         {
                             byte[] imageData = (byte[])reader["image"];
-                            yield return new ImagePhotocool(reader.GetString("nom"), imageData);
+                            yield return new ImagePhotocool(reader.GetInt64("id"), imageData);
                         }
                     }
                 }

@@ -45,9 +45,9 @@ public class ModifyTagViewModel : ViewModel
         set { _messageColor = value; OnPropertyChanged(nameof(MessageColor)); }
     }
 
-    public ModifyTagViewModel()
+    public ModifyTagViewModel(string tag = "")
     {
-        _tagToModify = string.Empty;
+        _tagToModify = tag;
         _newTagName = string.Empty;
         _newTagParent = string.Empty;
         _message = string.Empty;
@@ -118,7 +118,8 @@ public class ModifyTagViewModel : ViewModel
 
         if (!string.IsNullOrWhiteSpace(newTagParent))
         {
-            DatabaseManager.modifyTagParent(tagToModify, newTagParent);
+            DatabaseManager.removeParentFromTag(tagToModify);
+            DatabaseManager.addParentToTag(tagToModify, newTagParent);
             
             SetMessage("Le parent du tag a été modifié!", GREEN);
             if (nameModified)
@@ -126,6 +127,8 @@ public class ModifyTagViewModel : ViewModel
                 SetMessage("Le nom et le parent du tag ont été modifiés!", GREEN);
             }
         }
+        
+        TagRepository.Refresh();
     }
 
     private void SetMessage(string message, Brush color)

@@ -4,14 +4,14 @@
         xmlns:v="using:photocool.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:photocool.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="photocool.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Width="800"
         Height="600"
-        Title="photocool"
-        Background="#D6BCA5">
+        Title="photocool">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -19,15 +19,41 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,*">
-        <v:MenuBar Grid.Row="0"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <v:SearchBar Name="Bar" Margin="30,30,30,0"/>
-            <CheckBox Name="AllFiltersCheck" IsChecked="False" Click="RefreshImageGrid" Content="L'image doit respecter tous les filtres"></CheckBox>
+    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="Auto,*">
+        <v:MenuBar Grid.Row="0" Grid.ColumnSpan="2"/>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
+            <v:SearchBar Name="Bar"/>
+            <CheckBox Name="AllFiltersCheck" IsChecked="False" Click="RefreshImageGrid" Content="L'image doit respecter tous les filtres"/>
         </StackPanel>
-        <ScrollViewer Grid.Row="2" AllowAutoHide="False">
-            <Grid HorizontalAlignment="Center" Name="ImageGrid"></Grid>
+        
+        <Border Grid.Row="2" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
+            <TreeView Name="TagTreeView" ItemsSource="{Binding TagNodes}" Width="200" Margin="4">
+                <TreeView.DataTemplates>
+                    <TreeDataTemplate DataType="{x:Type local:TagNode}" ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Tag}">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Ajouter un tag" Click="AddTagToParent"></MenuItem>
+                                    <MenuItem Header="Modifier le tag" Click="ModifyTag"></MenuItem>
+                                    <MenuItem Header="Déparenter" Click="DeparentTag"></MenuItem>
+                                    <MenuItem Header="Supprimer" Click="DeleteTag"></MenuItem>
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
+                    </TreeDataTemplate>
+                </TreeView.DataTemplates>
+                
+                <TreeView.ItemContainerTheme>
+                    <ControlTheme TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                        <Setter Property="IsExpanded" Value="True" />
+                    </ControlTheme>
+                </TreeView.ItemContainerTheme>
+            </TreeView>
+        </Border>
+        
+        <ScrollViewer Grid.Row="2" Grid.Column="1" Margin="10" AllowAutoHide="False">
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Name="ImagePanel"/>
         </ScrollViewer>
     </Grid>
-
 </Window>

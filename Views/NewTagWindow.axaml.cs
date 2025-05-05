@@ -12,11 +12,12 @@ namespace photocool.Views;
 
 public partial class NewTagWindow : Window
 {
-    public NewTagViewModel ViewModel { get; } = new();
+    public NewTagViewModel ViewModel { get; }
     
-    public NewTagWindow()
+    public NewTagWindow(string parent = "")
     {
         InitializeComponent();
+        ViewModel = new NewTagViewModel(parent);
         DataContext = ViewModel;
     }
     

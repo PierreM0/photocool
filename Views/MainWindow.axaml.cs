@@ -2,6 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using photocool.Models;
 using photocool.ViewModels;
 
 namespace photocool.Views;
@@ -27,6 +28,36 @@ public partial class MainWindow : Window
         if (AllFiltersCheck.IsChecked.HasValue)
             allFilters = AllFiltersCheck.IsChecked.Value;
         
-        ViewModel.HandleRefreshImageGrid(Bar.PillsList.List, ImageGrid, allFilters);
+        ViewModel.HandleRefreshImageGrid(Bar.PillsList.List, ImagePanel, allFilters);
+    }
+
+    private async void AddTagToParent(object? sender, RoutedEventArgs e)
+    {
+        Window window = new NewTagWindow((TagTreeView.SelectedItem as TagNode).Tag);
+        Window? parentWindow = this.VisualRoot as Window;
+        if (parentWindow == null)
+            return;
+        
+        await window.ShowDialog(parentWindow);
+    }
+
+    private void DeleteTag(object? sender, RoutedEventArgs e)
+    {
+        ViewModel.ExecuteDeleteTag(TagTreeView.SelectedItem);
+    }
+
+    private async void ModifyTag(object? sender, RoutedEventArgs e)
+    {
+        Window window = new ModifyTagWindow((TagTreeView.SelectedItem as TagNode).Tag);
+        Window? parentWindow = this.VisualRoot as Window;
+        if (parentWindow == null)
+            return;
+        
+        await window.ShowDialog(parentWindow);
+    }
+
+    private void DeparentTag(object? sender, RoutedEventArgs e)
+    {
+        ViewModel.ExecuteDeparentTag(TagTreeView.SelectedItem);
     }
 }

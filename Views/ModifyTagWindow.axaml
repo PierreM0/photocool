@@ -8,12 +8,11 @@
         x:Class="photocool.Views.ModifyTagWindow"
         Title="Modifier un tag"
         Width="300"
-        Height="350"
-        Background="#D6BCA5">
+        Height="350">
     
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Spacing="10">
-            <Button Content="Modifier" Background="#B39084" Click="Modify_Click"></Button>
+            <Button Content="Modifier" Click="Modify_Click"></Button>
             <Button Content="Fermer" Click="Close_Click"></Button>
         </StackPanel>
         

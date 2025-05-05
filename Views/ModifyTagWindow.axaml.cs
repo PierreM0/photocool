@@ -10,11 +10,12 @@ namespace photocool.Views;
 
 public partial class ModifyTagWindow : Window
 {
-    private ModifyTagViewModel ViewModel = new();
+    private ModifyTagViewModel ViewModel { get; }
     
-    public ModifyTagWindow()
+    public ModifyTagWindow(string tag = "")
     {
         InitializeComponent();
+        ViewModel = new ModifyTagViewModel(tag);
         DataContext = ViewModel;
     }
 

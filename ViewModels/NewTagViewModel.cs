@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Avalonia.Media;
+using Mysqlx.Datatypes;
 using photocool.DB;
 
 namespace photocool.ViewModels;
@@ -38,10 +39,10 @@ public class NewTagViewModel : ViewModel
         set { _messageColor = value; OnPropertyChanged(nameof(MessageColor)); }
     }
 
-    public NewTagViewModel()
+    public NewTagViewModel(string parent = "")
     {
         _tagName = string.Empty;
-        _tagParent = string.Empty;
+        _tagParent = parent;
         _message = string.Empty;
         _messageColor = new SolidColorBrush(Colors.Black);
         Tags = TagRepository.Tags;

@@ -4,13 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:photocool.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             VerticalAlignment="Center" HorizontalAlignment="Center" 
              x:Class="photocool.Views.ImageCard">
-    <StackPanel Margin="10">
-        <Button Width="150" Height="125">
-            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                <Image HorizontalAlignment="Center" Name="ImagePreview" Width="75" Height="75"></Image>
-                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Name="ImageName"></TextBlock>
-            </StackPanel>
-        </Button>
-    </StackPanel>
+    <Border BorderBrush="Gray" BorderThickness="1" Padding="4" CornerRadius="8">
+        <Grid>
+            <Image Name="ImagePreview"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Stretch="Uniform"
+                   MaxWidth="140"
+                   MaxHeight="140"/>
+        </Grid>
+    </Border>
 </UserControl>

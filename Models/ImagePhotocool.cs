@@ -2,12 +2,12 @@
 
 public class ImagePhotocool
 {
-    public string Name { get; }
+    public long Id { get; }
     public byte[] Data { get; }
 
-    public ImagePhotocool(string name, byte[] data)
+    public ImagePhotocool(long id, byte[] data)
     {
-        Name = name;
+        Id = id;
         Data = data;
     }
 }

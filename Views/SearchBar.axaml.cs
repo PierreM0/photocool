@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices.Swift;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -24,13 +25,12 @@ public partial class SearchBar: UserControl
         AjoutFiltre.ItemsSource = TagRepository.Tags;
     }
 
-
-    private void NewFilter_OnClick(object? sender, RoutedEventArgs e)
+    public void AddFilter(string? filter)
     {
-        if (string.IsNullOrWhiteSpace(AjoutFiltre.Text))
+        if (string.IsNullOrWhiteSpace(filter))
             return;
 
-        if (!TagRepository.Contains(AjoutFiltre.Text))
+        if (!TagRepository.Contains(filter))
             return;
         
         Pill pill = new();
@@ -44,7 +44,7 @@ public partial class SearchBar: UserControl
         pill.PillColor = new SolidColorBrush(c);
 
         
-        pill.Text = AjoutFiltre.Text;
+        pill.Text = filter;
         
         pill.HorizontalAlignment = HorizontalAlignment.Center;
         pill.VerticalAlignment = VerticalAlignment.Center;
@@ -52,5 +52,11 @@ public partial class SearchBar: UserControl
         PillsList.Add(pill, OnPillClick);
 
         AjoutFiltre.Text = "";
+    }
+
+
+    private void NewFilter_OnClick(object? sender, RoutedEventArgs e)
+    {
+        AddFilter(AjoutFiltre.Text);
     }
 }
