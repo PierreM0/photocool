@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using photocool.Models;
 using photocool.ViewModels;
@@ -59,5 +60,17 @@ public partial class MainWindow : Window
     private void DeparentTag(object? sender, RoutedEventArgs e)
     {
         ViewModel.ExecuteDeparentTag(TagTreeView.SelectedItem);
+    }
+
+    private void TagNode_OnPointerPress(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
+        {
+            if (sender is Border border && border.Child is TextBlock textBlock)
+            {
+                Bar.AddFilter(textBlock.Text);
+                RefreshImageGrid(null, null);
+            }
+        }
     }
 }

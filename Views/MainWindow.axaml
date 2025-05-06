@@ -19,28 +19,30 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
         <v:MenuBar Grid.Row="0" Grid.ColumnSpan="2"/>
         
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
+        <CheckBox Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Name="AllFiltersCheck" IsChecked="False"
+                  Click="RefreshImageGrid" Content="L'image doit respecter tous les filtres"/>
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="10">
             <v:SearchBar Name="Bar"/>
-            <CheckBox Name="AllFiltersCheck" IsChecked="False" Click="RefreshImageGrid" Content="L'image doit respecter tous les filtres"/>
         </StackPanel>
         
-        <Border Grid.Row="2" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
+        <Border Grid.Row="3" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
             <TreeView Name="TagTreeView" ItemsSource="{Binding TagNodes}" Width="200" Margin="4">
                 <TreeView.DataTemplates>
                     <TreeDataTemplate DataType="{x:Type local:TagNode}" ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding Tag}">
-                            <TextBlock.ContextMenu>
+                        <Border BorderBrush="Gray" Background="Transparent" PointerPressed="TagNode_OnPointerPress">
+                            <Border.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Ajouter un tag" Click="AddTagToParent"></MenuItem>
                                     <MenuItem Header="Modifier le tag" Click="ModifyTag"></MenuItem>
                                     <MenuItem Header="Déparenter" Click="DeparentTag"></MenuItem>
                                     <MenuItem Header="Supprimer" Click="DeleteTag"></MenuItem>
                                 </ContextMenu>
-                            </TextBlock.ContextMenu>
-                        </TextBlock>
+                            </Border.ContextMenu>
+                            <TextBlock Text="{Binding Tag}" Padding="4"></TextBlock>
+                        </Border>
                     </TreeDataTemplate>
                 </TreeView.DataTemplates>
                 
@@ -52,7 +54,7 @@
             </TreeView>
         </Border>
         
-        <ScrollViewer Grid.Row="2" Grid.Column="1" Margin="10" AllowAutoHide="False">
+        <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="10" AllowAutoHide="False">
             <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Name="ImagePanel"/>
         </ScrollViewer>
     </Grid>
