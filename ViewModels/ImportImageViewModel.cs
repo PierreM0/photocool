@@ -21,13 +21,6 @@ public class ImportImageViewModel : ViewModel
         set { _imageSource = value; OnPropertyChanged(nameof(ImageSource)); }
     }
     
-    private string _imageName;
-    public string ImageName
-    {
-        get => _imageName;
-        set { _imageName = value; OnPropertyChanged(nameof(ImageName)); }
-    }
-    
     private string _message;
     public string Message
     {
@@ -73,28 +66,15 @@ public class ImportImageViewModel : ViewModel
             return;
         }
         
-        if (string.IsNullOrWhiteSpace(ImageName))
-        {
-            SetMessage("Veuillez renseigner un nom à l'image!", RED);
-            return;
-        }
-
-        if (DatabaseManager.getImageId(ImageName) != -1)
-        {
-            SetMessage("Le nom d'image a déjà été utilisé!", RED);
-            return;
-        }
-        
-        DatabaseManager.addImage(_imagePath, ImageName);
+        long id = DatabaseManager.addImage(_imagePath);
 
         foreach (Pill pill in pills)
         {
-            DatabaseManager.addTagToImage(ImageName, pill.Text);
+            DatabaseManager.addTagToImage(id, pill.Text);
         }
         
         SetMessage("L'image a été ajoutée avec succès!", GREEN);
         ImageSource = null;
-        ImageName = string.Empty;
         _imagePath = string.Empty;
     }
     

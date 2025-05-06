@@ -19,8 +19,6 @@
             
             <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="10">
                 <Button Content="Sélectionner une image" Click="Select_Image_Click"></Button>
-                <TextBlock Text="Nom de l'image"></TextBlock>
-                <TextBox MaxLength="30" Text="{Binding ImageName}"></TextBox>
                 <v:SearchBar Name="Bar"></v:SearchBar>
             </StackPanel>
         </Grid>

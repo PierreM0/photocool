@@ -25,7 +25,7 @@ public class MainWindowViewModel : ViewModel
             filters.Add(pill.Text);
         }
         
-        IEnumerable<ImagePhotocool> images;
+        IEnumerable<ThumbnailPhotocool> images;
         if (filters.Count == 0)
         {
             images = DatabaseManager.getAllImagesAsStream();
@@ -39,7 +39,7 @@ public class MainWindowViewModel : ViewModel
             images = DatabaseManager.getImagesMustSatisfyAnyFilterAsStream(filters);
         }
         
-        foreach (ImagePhotocool image in images)
+        foreach (ThumbnailPhotocool image in images)
         {
             ImageCard imageCard = new(image.Data)
             {

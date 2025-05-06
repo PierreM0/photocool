@@ -335,18 +335,19 @@ public class DatabaseManager
     /// <param name="imagePath">chemin du fichier de l'image</param>
     /// <param name="nom">nom de l'image</param>
     /// <returns>l'id de l'image insérée</returns>
-    public static long addImage(string imagePath, string nom)
+    public static long addImage(string imagePath)
     {
         byte[] imageData = File.ReadAllBytes(imagePath);
+        byte[] miniature = ThumbnailPhotocool.CreateThumbnailFromData(imageData);
         long id = -1L;
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "INSERT INTO Images (nom, image) values (@nom, @image);";
+            string query = "INSERT INTO Images (image, miniature) values (@image, @miniature);";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@nom", nom);
                 command.Parameters.AddWithValue("@image", imageData);
+                command.Parameters.AddWithValue("@miniature", miniature);
                 command.ExecuteNonQuery();
                 id = command.LastInsertedId;
             }
@@ -363,7 +364,7 @@ public class DatabaseManager
     /// <param name="imageId">id de l'image (optionnel mais accelère)</param>
     /// <param name="tagId">id du tag (optionnel mais accelère)</param>
     /// <returns> l'id de la relation créée</returns>
-    public static long addTagToImage(string nom, string tag,long imageId =-1L, long tagId=-1L)
+    public static long addTagToImage(long imageId, string tag, long tagId=-1L)
     {
         long tagImageId = -1L;
         if (tagId == -1L)
@@ -372,9 +373,7 @@ public class DatabaseManager
             tagId = getTagId(tag);
             Console.WriteLine(tagId);
         }
-            
-        if (imageId == -1L)
-            imageId = getImageId(nom);
+
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
@@ -468,27 +467,27 @@ public class DatabaseManager
         }
     }
 
-    public static IEnumerable<ImagePhotocool> getAllImagesAsStream()
+    public static IEnumerable<ThumbnailPhotocool> getAllImagesAsStream()
     {
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "SELECT * FROM `Images`";
+            string query = "SELECT id, miniature FROM `Images`";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        byte[] imageData = (byte[])reader["image"];
-                        yield return new ImagePhotocool(reader.GetInt64("id"), imageData);
+                        byte[] thumbnail = (byte[])reader["miniature"];
+                        yield return new ThumbnailPhotocool(reader.GetInt64("id"), thumbnail);
                     }
                 }
             }   
         }
     }
 
-    public static IEnumerable<ImagePhotocool> getImagesMustSatisfyAnyFilterAsStream(List<string> filters)
+    public static IEnumerable<ThumbnailPhotocool> getImagesMustSatisfyAnyFilterAsStream(List<string> filters)
     {
         List<long> ids = new List<long>();
         foreach (string tag in filters)
@@ -531,7 +530,7 @@ public class DatabaseManager
                 AddDescendants(id, hierarchy, relevantIds);
             }
 
-            query = $@"SELECT *
+            query = $@"SELECT id, miniature
                         FROM `Images`
                         WHERE id IN (
                             SELECT DISTINCT image_id
@@ -544,15 +543,15 @@ public class DatabaseManager
                 {
                     while (reader.Read())
                     {
-                        byte[] imageData = (byte[])reader["image"];
-                        yield return new ImagePhotocool(reader.GetInt64("id"), imageData);
+                        byte[] thumbnail = (byte[])reader["miniature"];
+                        yield return new ThumbnailPhotocool(reader.GetInt64("id"), thumbnail);
                     }
                 }
             }
         }
     }
     
-    public static IEnumerable<ImagePhotocool> getImagesMustSatisfyAllFiltersAsStream(List<string> filters)
+    public static IEnumerable<ThumbnailPhotocool> getImagesMustSatisfyAllFiltersAsStream(List<string> filters)
     {
         List<long> ids = new List<long>();
         foreach (string tag in filters)
@@ -612,7 +611,7 @@ public class DatabaseManager
             HashSet<long> relevantIds = new(ids);
 
             // go through all images and apply filters
-            query = "SELECT * FROM `Images`";
+            query = "SELECT id, miniature FROM `Images`";
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 using (var reader = command.ExecuteReader())
@@ -664,8 +663,8 @@ public class DatabaseManager
                         
                         if (allSatisfied)
                         {
-                            byte[] imageData = (byte[])reader["image"];
-                            yield return new ImagePhotocool(reader.GetInt64("id"), imageData);
+                            byte[] thumbnail = (byte[])reader["miniature"];
+                            yield return new ThumbnailPhotocool(reader.GetInt64("id"), thumbnail);
                         }
                     }
                 }

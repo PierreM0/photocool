@@ -30,8 +30,8 @@ USE photocool;
 
 CREATE TABLE `Images` (
   `id` int(11) NOT NULL,
-  `nom` varchar(30) NOT NULL,
-  `image` longblob NOT NULL
+  `image` longblob NOT NULL,
+  `miniature` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -75,8 +75,7 @@ CREATE TABLE `TagFamille` (
 -- Index pour la table `Images`
 --
 ALTER TABLE `Images`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nom` (`nom`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `Tag`
@@ -107,13 +106,13 @@ ALTER TABLE `TagFamille`
 -- AUTO_INCREMENT pour la table `Images`
 --
 ALTER TABLE `Images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT pour la table `Tag`
 --
 ALTER TABLE `Tag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- Contraintes pour les tables déchargées
