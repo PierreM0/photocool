@@ -77,6 +77,28 @@ public class DatabaseManager
         return tagsAndIds;
     }
 
+    public static byte[] getImage(long id)
+    {
+        byte[] data = null;
+        string query = "SELECT image FROM `Images` WHERE id = @id";
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            MySqlCommand command = new MySqlCommand(query, connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            using (MySqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    data = (byte[])reader["image"];
+                }
+            }
+        }
+
+        return data;
+    }
+
     /// <summary>
     /// Fonction qui ajoute un tag et renvoi son id.
     /// </summary>

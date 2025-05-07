@@ -41,7 +41,7 @@ public class MainWindowViewModel : ViewModel
         
         foreach (ThumbnailPhotocool image in images)
         {
-            ImageCard imageCard = new(image.Data)
+            ImageCard imageCard = new(image.Id, image.Data)
             {
                 Width = 140,
                 Height = 140,

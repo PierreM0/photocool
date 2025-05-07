@@ -6,7 +6,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              VerticalAlignment="Center" HorizontalAlignment="Center" 
              x:Class="photocool.Views.ImageCard">
-    <Border BorderBrush="Gray" BorderThickness="1" Padding="4" CornerRadius="8">
+    <Border Name="ImageBorder" BorderBrush="Gray" Background="Azure" BorderThickness="1" Padding="4" CornerRadius="8"
+            PointerPressed="ImageCard_OnPointerPressed" PointerEntered="ImageCard_OnPointerEntered" PointerExited="ImageCard_OnPointerExited">
         <Grid>
             <Image Name="ImagePreview"
                    HorizontalAlignment="Center"
@@ -15,5 +16,12 @@
                    MaxWidth="140"
                    MaxHeight="140"/>
         </Grid>
+        
+        <Border.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Modifier"></MenuItem>
+                <MenuItem Header="Supprimer"></MenuItem>
+            </ContextMenu>
+        </Border.ContextMenu>
     </Border>
 </UserControl>
