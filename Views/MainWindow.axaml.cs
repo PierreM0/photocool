@@ -20,7 +20,7 @@ public partial class MainWindow : Window
         
         RefreshImageGrid(null, null);
         Bar.NewFilter.Click += RefreshImageGrid;
-        Bar.OnPillClick = new Action(() => RefreshImageGrid(null, null));
+        Bar.OnPillClick = () => RefreshImageGrid(null, null);
     }
 
     public void RefreshImageGrid(object? sender, RoutedEventArgs e)
@@ -44,22 +44,33 @@ public partial class MainWindow : Window
 
     private void DeleteTag(object? sender, RoutedEventArgs e)
     {
+        Bar.TryRemoveFilter((TagTreeView.SelectedItem as TagNode).Tag);
         ViewModel.ExecuteDeleteTag(TagTreeView.SelectedItem);
     }
 
     private async void ModifyTag(object? sender, RoutedEventArgs e)
     {
-        Window window = new ModifyTagWindow((TagTreeView.SelectedItem as TagNode).Tag);
+        string tag = (TagTreeView.SelectedItem as TagNode).Tag;
+        
+        Window window = new ModifyTagWindow(tag);
         Window? parentWindow = this.VisualRoot as Window;
         if (parentWindow == null)
             return;
         
         await window.ShowDialog(parentWindow);
+
+        TagRepository.Refresh();
+        if (!TagRepository.Contains(tag))
+        {
+            Bar.TryRemoveFilter(tag);
+        }
+        RefreshImageGrid(null, null);
     }
 
     private void DeparentTag(object? sender, RoutedEventArgs e)
     {
         ViewModel.ExecuteDeparentTag(TagTreeView.SelectedItem);
+        RefreshImageGrid(null, null);
     }
 
     private void TagNode_OnPointerPress(object? sender, PointerPressedEventArgs e)

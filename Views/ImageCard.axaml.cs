@@ -3,9 +3,11 @@ using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using photocool.DB;
 using photocool.ViewModels;
 
 namespace photocool.Views;
@@ -13,8 +15,9 @@ namespace photocool.Views;
 public partial class ImageCard : UserControl
 {
     private long Id { get; }
+    private Action RefreshAction { get; set; }
     
-    public ImageCard(long id, byte[] imageData)
+    public ImageCard(long id, byte[] imageData, Action refreshAction)
     { 
         InitializeComponent();
 
@@ -23,6 +26,8 @@ public partial class ImageCard : UserControl
         ImagePreview.Source = bitmap;
 
         DataContext = new ImageCardViewModel(id);
+        
+        RefreshAction = refreshAction;
     }
 
     private void ImageCard_OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -47,5 +52,17 @@ public partial class ImageCard : UserControl
     private void ImageCard_OnPointerExited(object? sender, PointerEventArgs e)
     {
         ImageBorder.Background = Brushes.Azure;
+    }
+
+    private void ImageDelete_OnClick(object? sender, RoutedEventArgs e)
+    {
+        DatabaseManager.removeImage(Id);
+        RefreshAction();
+    }
+
+    private void ImageModify_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Window window = new ModifyImageWindow();
+        window.Show();
     }
 }

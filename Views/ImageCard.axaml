@@ -19,8 +19,8 @@
         
         <Border.ContextMenu>
             <ContextMenu>
-                <MenuItem Header="Modifier"></MenuItem>
-                <MenuItem Header="Supprimer"></MenuItem>
+                <MenuItem Header="Modifier" Click="ImageModify_OnClick"></MenuItem>
+                <MenuItem Header="Supprimer" Click="ImageDelete_OnClick"></MenuItem>
             </ContextMenu>
         </Border.ContextMenu>
     </Border>

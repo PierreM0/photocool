@@ -5,5 +5,5 @@
              xmlns:viewModels="clr-namespace:photocool.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="photocool.Views.ListPills">
-    <WrapPanel MaxWidth="700" Height="50" Orientation="Horizontal" Name="PillContainer" Margin="10" />
+    <WrapPanel MaxWidth="700" Orientation="Horizontal" Name="PillContainer" Margin="10" />
 </UserControl>

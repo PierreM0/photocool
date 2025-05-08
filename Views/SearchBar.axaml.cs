@@ -42,8 +42,6 @@ public partial class SearchBar: UserControl
 
         Color c = HslColor.FromHsl(h, s, l).ToRgb();
         pill.PillColor = new SolidColorBrush(c);
-
-        
         pill.Text = filter;
         
         pill.HorizontalAlignment = HorizontalAlignment.Center;
@@ -54,6 +52,26 @@ public partial class SearchBar: UserControl
         AjoutFiltre.Text = "";
     }
 
+    public void TryRemoveFilter(string filter)
+    {
+        Pill pillToRemove = null;
+        foreach (Pill pill in PillsList.List)
+        {
+            if (pill.Text == filter)
+            {
+                pillToRemove = pill;
+            }
+        }
+
+        if (pillToRemove == null)
+        {
+            return;
+        }
+        
+        PillsList.List.Remove(pillToRemove);
+        PillsList.PillContainer.Children.Remove(pillToRemove);
+        OnPillClick();
+    }
 
     private void NewFilter_OnClick(object? sender, RoutedEventArgs e)
     {

@@ -442,15 +442,9 @@ public class DatabaseManager
     /// <summary>
     /// enlève une image de la bdd
     /// </summary>
-    /// <param name="nom">nom de l'image</param>
-    /// <param name="imageId">id de l'image (optionnel)</param>
-    public static void removeImage(string nom, long imageId = -1L)
+    /// <param name="nom">id de l'image</param>
+    public static void removeImage(long imageId)
     {
-        if (imageId == -1L)
-        {
-            imageId = getImageId(nom);
-        }
-
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
         {
             connection.Open();

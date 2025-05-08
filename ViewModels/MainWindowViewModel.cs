@@ -41,7 +41,7 @@ public class MainWindowViewModel : ViewModel
         
         foreach (ThumbnailPhotocool image in images)
         {
-            ImageCard imageCard = new(image.Id, image.Data)
+            ImageCard imageCard = new(image.Id, image.Data, () => HandleRefreshImageGrid(pills, imagePanel, allFilters))
             {
                 Width = 140,
                 Height = 140,
