@@ -9,10 +9,14 @@
         x:DataType="vm:ModifyImageViewModel"
         Title="Modifier une image">
     
-    <Grid Margin="20" RowDefinitions="Auto, *, Auto, Auto">
-        <TextBlock Grid.Row="0" Text="Prévisualisation"></TextBlock>
+    <Grid Margin="20" RowDefinitions="Auto, *, Auto, Auto" ColumnDefinitions="Auto, *">
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="Prévisualisation"></TextBlock>
+        
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
+            <views:TagTreeView Name="TagTree"></views:TagTreeView>
+        </Border>
             
-        <Grid Grid.Row="1" ColumnDefinitions="* ,*" Margin="0,0,0,15">
+        <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="* ,*" Margin="0,0,0,15">
             <Border Grid.Column="0" BorderThickness="1" Margin="0,0,10,0">
                 <Image Name="ImagePreview" Source="{Binding ImageSource}" Stretch="Uniform"></Image>
             </Border>
@@ -22,7 +26,7 @@
             </StackPanel>
         </Grid>
             
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
             <Button Content="Modifier" Click="Modify_Click"/>
             <Button Content="Fermer" Click="Close_Click"/>
         </StackPanel>

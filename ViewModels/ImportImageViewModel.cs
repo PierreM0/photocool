@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using photocool.DB;
+using photocool.Models;
 using photocool.Views;
 
 namespace photocool.ViewModels;
 
 public class ImportImageViewModel : ViewModel
 {
-    private string _imagePath;
+    private List<string> _imagePaths = new();
     
-    private Bitmap _imageSource;
-    public Bitmap ImageSource
-    {
-        get => _imageSource;
-        set { _imageSource = value; OnPropertyChanged(nameof(ImageSource)); }
-    }
+    public ObservableCollection<Bitmap> ImagePreviews { get; set; } = new();
     
     private string _message;
     public string Message
@@ -38,8 +35,6 @@ public class ImportImageViewModel : ViewModel
     public ImportImageViewModel()
     {
         TagRepository.Refresh();
-        _imageSource = null;
-        _imagePath = string.Empty;
         _message = string.Empty;
     }
 
@@ -47,35 +42,41 @@ public class ImportImageViewModel : ViewModel
     {
         OpenFileDialog dialog = new();
         dialog.Filters.Add(new FileDialogFilter() { Name = "Images", Extensions = { "jpeg", "jpg" } });
+        dialog.AllowMultiple = true;
         
         string[]? result = await dialog.ShowAsync(parentWindow);
         if (result != null && result.Length > 0)
         {
-            string path = result[0];
-            Bitmap bitmap = new Bitmap(path);
-            ImageSource = bitmap;
-            _imagePath = path;
+            foreach (string path in result)
+            {
+                Bitmap bitmap = new Bitmap(new MemoryStream(ThumbnailPhotocool.CreateThumbnailFromData(File.ReadAllBytes(path))));
+                ImagePreviews.Add(bitmap);
+                _imagePaths.Add(path);
+            }
         }
     }
 
     public void HandleImport(List<Pill> pills)
     {
-        if (string.IsNullOrEmpty(_imagePath))
+        if (_imagePaths.Count == 0)
         {
-            SetMessage("Veuillez sélectionner une image!", RED);
+            SetMessage("Veuillez sélectionner une ou plusieurs images!", RED);
             return;
         }
-        
-        long id = DatabaseManager.addImage(_imagePath);
 
-        foreach (Pill pill in pills)
+        foreach (string path in _imagePaths)
         {
-            DatabaseManager.addTagToImage(id, pill.Text);
+            long id = DatabaseManager.addImage(path);
+
+            foreach (Pill pill in pills)
+            {
+                DatabaseManager.addTagToImage(id, pill.Text);
+            }
         }
         
-        SetMessage("L'image a été ajoutée avec succès!", GREEN);
-        ImageSource = null;
-        _imagePath = string.Empty;
+        SetMessage("Succès de l'importation!", GREEN);
+        ImagePreviews.Clear();
+        _imagePaths.Clear();
     }
     
     private void SetMessage(string message, Brush color)

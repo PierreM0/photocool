@@ -24,6 +24,10 @@ public partial class ModifyImageWindow : Window
         {
             Bar.AddFilter(tag);
         }
+
+        TagTree.Bar = Bar;
+        TagTree.Bar.OnPillClick = () => { };
+        TagTree.Refresh = () => { };
     }
     
     private void Modify_Click(object? sender, RoutedEventArgs e)

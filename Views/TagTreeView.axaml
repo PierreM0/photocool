@@ -1,0 +1,33 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:photocool.Models"
+             xmlns:viewModels="clr-namespace:photocool.ViewModels"
+             x:DataType="viewModels:TagTreeViewViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="photocool.Views.TagTreeView">
+    <TreeView Name="TagTree" ItemsSource="{Binding TagNodes}" Width="200" Margin="4">
+        <TreeView.DataTemplates>
+            <TreeDataTemplate DataType="{x:Type local:TagNode}" ItemsSource="{Binding Children}">
+                <Border BorderBrush="Gray" Background="Transparent" PointerPressed="TagNode_OnPointerPress">
+                    <Border.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Ajouter un tag" Click="AddTagToParent"></MenuItem>
+                            <MenuItem Header="Modifier le tag" Click="ModifyTag"></MenuItem>
+                            <MenuItem Header="Déparenter" Click="DeparentTag"></MenuItem>
+                            <MenuItem Header="Supprimer" Click="DeleteTag"></MenuItem>
+                        </ContextMenu>
+                    </Border.ContextMenu>
+                    <TextBlock Text="{Binding Tag}" Padding="4"></TextBlock>
+                </Border>
+            </TreeDataTemplate>
+        </TreeView.DataTemplates>
+                
+        <TreeView.ItemContainerTheme>
+            <ControlTheme TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                <Setter Property="IsExpanded" Value="True" />
+            </ControlTheme>
+        </TreeView.ItemContainerTheme>
+    </TreeView>
+</UserControl>

@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿using System;
+using System.Reflection.Metadata.Ecma335;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -14,6 +16,11 @@ public partial class ImportImageWindow : Window
     {
         InitializeComponent();
         DataContext = ViewModel;
+
+        TagTree.Bar = Bar;
+        TagTree.Refresh = () => { };
+
+        TagTree.Bar.OnPillClick = () => { };
     }
 
     private void Select_Image_Click(object? sender, RoutedEventArgs e)

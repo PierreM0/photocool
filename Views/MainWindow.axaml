@@ -29,29 +29,7 @@
         </StackPanel>
         
         <Border Grid.Row="3" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
-            <TreeView Name="TagTreeView" ItemsSource="{Binding TagNodes}" Width="200" Margin="4">
-                <TreeView.DataTemplates>
-                    <TreeDataTemplate DataType="{x:Type local:TagNode}" ItemsSource="{Binding Children}">
-                        <Border BorderBrush="Gray" Background="Transparent" PointerPressed="TagNode_OnPointerPress">
-                            <Border.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Ajouter un tag" Click="AddTagToParent"></MenuItem>
-                                    <MenuItem Header="Modifier le tag" Click="ModifyTag"></MenuItem>
-                                    <MenuItem Header="Déparenter" Click="DeparentTag"></MenuItem>
-                                    <MenuItem Header="Supprimer" Click="DeleteTag"></MenuItem>
-                                </ContextMenu>
-                            </Border.ContextMenu>
-                            <TextBlock Text="{Binding Tag}" Padding="4"></TextBlock>
-                        </Border>
-                    </TreeDataTemplate>
-                </TreeView.DataTemplates>
-                
-                <TreeView.ItemContainerTheme>
-                    <ControlTheme TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                        <Setter Property="IsExpanded" Value="True" />
-                    </ControlTheme>
-                </TreeView.ItemContainerTheme>
-            </TreeView>
+            <v:TagTreeView Name="TagTree"></v:TagTreeView>
         </Border>
         
         <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="10" AllowAutoHide="False">
