@@ -56,6 +56,12 @@ public class ImportImageViewModel : ViewModel
         }
     }
 
+    public void RemoveImages()
+    {
+        ImagePreviews.Clear();
+        _imagePaths.Clear();
+    }
+
     public void HandleImport(List<Pill> pills)
     {
         if (_imagePaths.Count == 0)
@@ -75,8 +81,7 @@ public class ImportImageViewModel : ViewModel
         }
         
         SetMessage("Succès de l'importation!", GREEN);
-        ImagePreviews.Clear();
-        _imagePaths.Clear();
+        RemoveImages();
     }
     
     private void SetMessage(string message, Brush color)

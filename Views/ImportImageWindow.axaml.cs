@@ -37,4 +37,9 @@ public partial class ImportImageWindow : Window
     {
         Close();
     }
+
+    private void RemoveImages_Click(object? sender, RoutedEventArgs e)
+    {
+        ViewModel.RemoveImages();
+    }
 }

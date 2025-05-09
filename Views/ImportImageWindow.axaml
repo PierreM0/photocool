@@ -36,6 +36,7 @@
             
             <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="10">
                 <Button Content="Sélectionner des images" Click="Select_Image_Click"></Button>
+                <Button Content="Retirer les images" Click="RemoveImages_Click"></Button>
                 <v:SearchBar Name="Bar"></v:SearchBar>
             </StackPanel>
         </Grid>
