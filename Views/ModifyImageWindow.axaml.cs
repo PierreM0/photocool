@@ -1,23 +1,35 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using photocool.DB;
 using photocool.ViewModels;
 
 namespace photocool.Views;
 
 public partial class ModifyImageWindow : Window
 {
-    public ModifyImageWindow()
+    private ModifyImageViewModel ViewModel { get; set; }
+    
+    public ModifyImageWindow(long id)
     {
         InitializeComponent();
         
-        DataContext = new ModifyImageViewModel();
+        ViewModel = new ModifyImageViewModel(id);
+        DataContext = ViewModel;
+
+        List<string> tags = DatabaseManager.GetImageTags(id);
+        foreach (string tag in tags)
+        {
+            Bar.AddFilter(tag);
+        }
     }
     
     private void Modify_Click(object? sender, RoutedEventArgs e)
     {
-        return;
+        ViewModel.ExecuteModify(Bar.PillsList.List);
+        Close();
     }
 
     private void Close_Click(object? sender, RoutedEventArgs e)

@@ -456,6 +456,55 @@ public class DatabaseManager
             }
         }
     }
+    
+    /// <summary>
+    /// récupère les tags d'une image
+    /// </summary>
+    /// <param name="nom">id de l'image</param>
+    public static List<string> GetImageTags(long imageId)
+    {
+        List<string> tags = new List<string>();
+        string query = @"SELECT tag FROM `Tag` WHERE `Tag`.`id` IN
+                            (
+                                SELECT tag_id FROM `TagImages` WHERE image_id=@imageId
+                            )";
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@imageId",imageId);
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        tags.Add(reader.GetString("tag"));
+                    }
+                }
+            }
+        }
+
+        return tags;
+    }
+    
+    /// <summary>
+    /// retire les tags d'une image
+    /// </summary>
+    /// <param name="nom">id de l'image</param>
+    public static void RemoveImageTags(long imageId)
+    {
+        string query = @"DELETE FROM `TagImages` WHERE `image_id`=@imageId";
+        using (MySqlConnection connection = new MySqlConnection(_connectionString))
+        {
+            connection.Open();
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@imageId",imageId);
+                command.ExecuteNonQuery();
+            }
+        }
+    }
 
     /// <summary>
     /// Enleve un tag d'une image

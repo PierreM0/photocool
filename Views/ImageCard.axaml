@@ -19,6 +19,7 @@
         
         <Border.ContextMenu>
             <ContextMenu>
+                <MenuItem Header="Télécharger" Click="ImageDownload_OnClick"></MenuItem>
                 <MenuItem Header="Modifier" Click="ImageModify_OnClick"></MenuItem>
                 <MenuItem Header="Supprimer" Click="ImageDelete_OnClick"></MenuItem>
             </ContextMenu>

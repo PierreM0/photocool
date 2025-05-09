@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using photocool.DB;
 using photocool.ViewModels;
+using SkiaSharp;
 
 namespace photocool.Views;
 
@@ -62,7 +63,29 @@ public partial class ImageCard : UserControl
 
     private void ImageModify_OnClick(object? sender, RoutedEventArgs e)
     {
-        Window window = new ModifyImageWindow();
+        Window window = new ModifyImageWindow(Id);
         window.Show();
+    }
+
+    private async void ImageDownload_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Window parentWindow = this.VisualRoot as Window;
+        
+        var dialog = new SaveFileDialog()
+        {
+            Title = "Téléchager une image",
+            InitialFileName = "image.jpg",
+            Filters = new()
+            {
+                new FileDialogFilter() { Name = "Image JPEG", Extensions = { "jpeg", "jpg" } }
+            }
+        };
+
+        var filePath = await dialog.ShowAsync(parentWindow);
+        if (string.IsNullOrEmpty(filePath))
+            return;
+        
+        Bitmap image = new Bitmap(new MemoryStream(DatabaseManager.getImage(Id)));
+        image.Save(filePath);
     }
 }
