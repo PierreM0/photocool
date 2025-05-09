@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="photocool.Views.MenuBar">
+    <Menu>
+        <MenuItem Header="Tag">
+            <MenuItem Header="Ajouter" Click="Add_Tag_Click"></MenuItem>
+            <MenuItem Header="Modifier" Click="Modify_Tag_Click"></MenuItem>
+            <MenuItem Header="Supprimer" Click="Delete_Tag_Click"></MenuItem>
+        </MenuItem>
+        
+        <MenuItem Header="Image">
+            <MenuItem Header="Importer" Click="Import_Image_Click"></MenuItem>
+        </MenuItem>
+    </Menu>
+</UserControl>

@@ -4,6 +4,7 @@
         xmlns:v="using:photocool.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:photocool.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="photocool.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -18,12 +19,24 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <DockPanel Width="800" Height="600">
-        <v:NavBar DockPanel.Dock="Top"/>
-        <DockPanel Name="Panel">
-            <v:SearchBar DockPanel.Dock="Top"/>
-            <Grid Name="ImageGrid"></Grid>
-        </DockPanel>
-    </DockPanel>
-
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
+        <v:MenuBar Grid.Row="0" Grid.ColumnSpan="2"/>
+        
+        <CheckBox Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Name="AllFiltersCheck" IsChecked="False"
+                  Click="RefreshImageGrid" Content="L'image doit respecter tous les filtres"/>
+        
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="10">
+            <v:SearchBar Name="Bar"/>
+        </StackPanel>
+        
+        <Separator Grid.Row="3" Grid.ColumnSpan="2" Background="SlateGray"></Separator>
+        
+        <Border Grid.Row="4" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
+            <v:TagTreeView Name="TagTree"></v:TagTreeView>
+        </Border>
+        
+        <ScrollViewer Grid.Row="4" Grid.Column="1" Margin="10" AllowAutoHide="False">
+            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Name="ImagePanel"/>
+        </ScrollViewer>
+    </Grid>
 </Window>

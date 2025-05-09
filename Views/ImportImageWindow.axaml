@@ -1,0 +1,51 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:v="clr-namespace:photocool.Views"
+        xmlns:vm="clr-namespace:photocool.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="photocool.Views.ImportImageWindow"
+        x:DataType="vm:ImportImageViewModel"
+        Title="Importer une image">
+    
+    <Grid Margin="20" RowDefinitions="Auto, *, Auto, Auto" ColumnDefinitions="Auto, *">
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="Images séléctionées"></TextBlock>
+        
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
+            <v:TagTreeView Name="TagTree"></v:TagTreeView>
+        </Border>
+        
+        <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="* ,*" Margin="0,0,0,15">
+            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="0,0,10,0">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding ImagePreviews}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}" Width="200" Height="200"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+            
+            <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="10">
+                <Button Content="Sélectionner des images" Click="Select_Image_Click"></Button>
+                <Button Content="Retirer les images" Click="RemoveImages_Click"></Button>
+                <v:SearchBar Name="Bar"></v:SearchBar>
+            </StackPanel>
+        </Grid>
+        
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+            <Button Content="Importer" Click="Import_Click"/>
+            <Button Content="Fermer" Click="Close_Click"/>
+        </StackPanel>
+        
+        <TextBlock Grid.Row="3" TextWrapping="Wrap" Foreground="{Binding MessageColor}" Text="{Binding Message}"></TextBlock>
+    </Grid>
+</Window>

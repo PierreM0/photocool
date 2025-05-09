@@ -20,13 +20,13 @@
         </Style>
     </UserControl.Styles>
     
-    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
+    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="20">
         
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-            <Label FontSize="12">Ajouter un filtre</Label>
+            <Label FontSize="12">Ajouter un tag</Label>
             <Border BorderBrush="Black" BorderThickness="2">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBox KeyUp="AjoutFiltre_OnKeyUp" Width="215" Height="30" Name="AjoutFiltre"></TextBox> 
+                    <AutoCompleteBox MaxLength="30" Width="215" Height="30" Name="AjoutFiltre"></AutoCompleteBox> 
                     <Button Click="NewFilter_OnClick" Name="NewFilter" FontSize="10" Height="30">
                         <Image Source="avares://photocool/Assets/plus-svgrepo-com.png"></Image>
                     </Button>
@@ -37,8 +37,7 @@
         
         <StackPanel>
             <Label FontSize="3">&#160;</Label> <!-- align the list with the textbox -->
-            <views:ListPills Name="PillsList" MaxRendered="3"/>
+            <views:ListPills Name="PillsList"/>
         </StackPanel>
-        
     </StackPanel>
 </UserControl>

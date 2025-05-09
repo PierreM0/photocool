@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:photocool.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             VerticalAlignment="Center" HorizontalAlignment="Center" 
+             x:Class="photocool.Views.ImageCard">
+    <Border Name="ImageBorder" BorderBrush="Gray" Background="Azure" BorderThickness="1" Padding="4" CornerRadius="8"
+            PointerPressed="ImageCard_OnPointerPressed" PointerEntered="ImageCard_OnPointerEntered" PointerExited="ImageCard_OnPointerExited">
+        <Grid>
+            <Image Name="ImagePreview"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Stretch="Uniform"
+                   MaxWidth="140"
+                   MaxHeight="140"/>
+        </Grid>
+        
+        <Border.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Télécharger" Click="ImageDownload_OnClick"></MenuItem>
+                <MenuItem Header="Modifier" Click="ImageModify_OnClick"></MenuItem>
+                <MenuItem Header="Supprimer" Click="ImageDelete_OnClick"></MenuItem>
+            </ContextMenu>
+        </Border.ContextMenu>
+    </Border>
+</UserControl>

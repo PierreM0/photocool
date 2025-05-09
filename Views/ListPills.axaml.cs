@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Tracing;
 using System.Threading;
 using Avalonia.Controls;
@@ -14,24 +15,22 @@ namespace photocool.Views;
 
 public partial class ListPills : UserControl
 {
-    
-    
     public ListPills()
     {
         InitializeComponent();
     }
-    
-    public int MaxRendered { get; set; } = 2;
 
     private static Dictionary<string, IBrush> pillColors = new();
-    private static List<Pill> _list = new();
-    public void Add(Pill pill)
+    public List<Pill> List { get; }= new();
+    public void Add(Pill pill, Action onPillClick = null)
     {
         
         pill.AddHandler(PointerPressedEvent, ((object sender, PointerPressedEventArgs e) =>
         {
-            _list.Remove(pill);
+            List.Remove(pill);
             PillContainer.Children.Remove(pill);
+            if (onPillClick != null)
+                onPillClick();
         }), RoutingStrategies.Tunnel);
         
         Dispatcher.UIThread.Invoke(() =>
@@ -46,28 +45,13 @@ public partial class ListPills : UserControl
             }
 
             // pas deux fois le meme filtre dans la liste
-            foreach (var p in _list)
+            foreach (var p in List)
             {
                 if (p.Text == pill.Text) return;
             }
 
-            _list.Add(pill);
-            
-            if (PillContainer.Children.Count < MaxRendered)
-            {
-                PillContainer.Children.Add(pill);
-            } 
-
-
-            else if (PillContainer.Children.Count == MaxRendered)
-            {
-                PillContainer.Children.Add(new Pill()
-                {
-                    Text = "...",
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                });
-            }
+            List.Add(pill);
+            PillContainer.Children.Add(pill);
         });
     }
 }

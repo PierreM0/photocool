@@ -1,0 +1,34 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:photocool.Views"
+        xmlns:vm="clr-namespace:photocool.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="photocool.Views.ModifyImageWindow"
+        x:DataType="vm:ModifyImageViewModel"
+        Title="Modifier une image">
+    
+    <Grid Margin="20" RowDefinitions="Auto, *, Auto, Auto" ColumnDefinitions="Auto, *">
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="Prévisualisation"></TextBlock>
+        
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
+            <views:TagTreeView Name="TagTree"></views:TagTreeView>
+        </Border>
+            
+        <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="* ,*" Margin="0,0,0,15">
+            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="0,0,10,0">
+                <Image Name="ImagePreview" Source="{Binding ImageSource}" Stretch="Uniform"></Image>
+            </Border>
+                
+            <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="10">
+                <views:SearchBar Name="Bar"></views:SearchBar>
+            </StackPanel>
+        </Grid>
+            
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+            <Button Content="Modifier" Click="Modify_Click"/>
+            <Button Content="Fermer" Click="Close_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
