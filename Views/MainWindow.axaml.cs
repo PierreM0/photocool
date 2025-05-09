@@ -18,15 +18,20 @@ public partial class MainWindow : Window
         ViewModel = new();
         DataContext = ViewModel;
         
-        RefreshImageGrid(null, null);
+        RefreshImages();
         Bar.NewFilter.Click += RefreshImageGrid;
-        Bar.OnPillClick = () => RefreshImageGrid(null, null);
+        Bar.OnPillClick = () => RefreshImages();
 
         TagTree.Bar = Bar;
-        TagTree.Refresh = () => RefreshImageGrid(null, null);
+        TagTree.Refresh = () => RefreshImages();
     }
 
     public void RefreshImageGrid(object? sender, RoutedEventArgs e)
+    {
+        RefreshImages();
+    }
+
+    public void RefreshImages()
     {
         bool allFilters = false;
         if (AllFiltersCheck.IsChecked.HasValue)

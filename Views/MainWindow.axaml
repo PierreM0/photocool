@@ -19,20 +19,23 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" ColumnDefinitions="Auto,*">
         <v:MenuBar Grid.Row="0" Grid.ColumnSpan="2"/>
         
         <CheckBox Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Name="AllFiltersCheck" IsChecked="False"
                   Click="RefreshImageGrid" Content="L'image doit respecter tous les filtres"/>
+        
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="10">
             <v:SearchBar Name="Bar"/>
         </StackPanel>
         
-        <Border Grid.Row="3" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
+        <Separator Grid.Row="3" Grid.ColumnSpan="2" Background="SlateGray"></Separator>
+        
+        <Border Grid.Row="4" Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="10" CornerRadius="4">
             <v:TagTreeView Name="TagTree"></v:TagTreeView>
         </Border>
         
-        <ScrollViewer Grid.Row="3" Grid.Column="1" Margin="10" AllowAutoHide="False">
+        <ScrollViewer Grid.Row="4" Grid.Column="1" Margin="10" AllowAutoHide="False">
             <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Name="ImagePanel"/>
         </ScrollViewer>
     </Grid>

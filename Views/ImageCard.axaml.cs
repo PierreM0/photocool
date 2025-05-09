@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Avalonia;
 using Avalonia.Controls;
@@ -16,32 +17,31 @@ namespace photocool.Views;
 public partial class ImageCard : UserControl
 {
     private long Id { get; }
+    private int Index { get; set; }
     private Action RefreshAction { get; set; }
+    private List<long> ImageIds { get; }
     
-    public ImageCard(long id, byte[] imageData, Action refreshAction)
+    public ImageCard(long id, int index, byte[] imageData, Action refreshAction, List<long> imageIds)
     { 
         InitializeComponent();
 
         Id = id;
+        Index = index;
         Bitmap bitmap = new Bitmap(new MemoryStream(imageData));
         ImagePreview.Source = bitmap;
 
         DataContext = new ImageCardViewModel(id);
         
         RefreshAction = refreshAction;
+        ImageIds = imageIds;
     }
 
     private void ImageCard_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
         {
-            Window window = new ImageView(Id);
+            Window window = new ImageView(Id, Index, ImageIds);
             window.Show();
-        }
-
-        if (e.GetCurrentPoint(null).Properties.IsRightButtonPressed)
-        {
-            Console.WriteLine(Id);
         }
     }
 

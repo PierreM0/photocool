@@ -4,6 +4,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="photocool.Views.ImageView"
-        Title="Vue de l'image">
-    <Image Name="FullImage"></Image>
+        Title="Vue de l'image"
+        KeyDown="Window_OnKeyDown">
+    <Grid ColumnDefinitions="Auto,*,Auto">
+        <Button Margin="10" Grid.Column="0" Content="Précedent" Focusable="False" Click="PreviousImage_OnClick"></Button>
+        
+        <Grid Grid.Column="1" RowDefinitions="*,Auto" VerticalAlignment="Center">
+            <Image Grid.Row="0" Name="FullImage" Stretch="Uniform"></Image>
+            <Label Grid.Row="1" FontSize="24" Name="Counter" Content="?/?" HorizontalAlignment="Center"></Label>
+        </Grid>
+        
+        <Button Margin="10" Grid.Column="2" HorizontalAlignment="Right" Content="Suivant" Focusable="False" Click="NextImage_OnClick"></Button>
+    </Grid>
 </Window>

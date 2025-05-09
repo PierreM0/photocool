@@ -557,7 +557,9 @@ public class DatabaseManager
         List<long> ids = new List<long>();
         foreach (string tag in filters)
         {
-            ids.Add(getTagId(tag));
+            long id = getTagId(tag);
+            if (id != -1)
+                ids.Add(getTagId(tag));
         }
         
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -621,7 +623,9 @@ public class DatabaseManager
         List<long> ids = new List<long>();
         foreach (string tag in filters)
         {
-            ids.Add(getTagId(tag));
+            long id = getTagId(tag);
+            if (id != -1)
+                ids.Add(getTagId(tag));
         }
         
         using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -684,7 +688,13 @@ public class DatabaseManager
                     while (reader.Read())
                     {
                         long imageId = reader.GetInt64("id");
-                        HashSet<long> tags = imageTags[imageId];
+                        HashSet<long> tags;
+                        if (imageTags.ContainsKey(imageId))
+                            tags = imageTags[imageId];
+                        else
+                        {
+                            continue;
+                        }
 
                         // check if all tags are satisfied
                         Dictionary<long, bool> satisfiedIds = new();

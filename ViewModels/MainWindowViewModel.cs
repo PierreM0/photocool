@@ -39,15 +39,19 @@ public class MainWindowViewModel : ViewModel
             images = DatabaseManager.getImagesMustSatisfyAnyFilterAsStream(filters);
         }
         
+        List<long> imageIds = new();
+        int index = 0;
         foreach (ThumbnailPhotocool image in images)
         {
-            ImageCard imageCard = new(image.Id, image.Data, () => HandleRefreshImageGrid(pills, imagePanel, allFilters))
+            imageIds.Add(image.Id);
+            ImageCard imageCard = new(image.Id, index, image.Data, () => HandleRefreshImageGrid(pills, imagePanel, allFilters), imageIds)
             {
                 Width = 140,
                 Height = 140,
                 Margin = new Thickness(5)
             };
             imagePanel.Children.Add(imageCard);
+            index++;
         }
     }
 
